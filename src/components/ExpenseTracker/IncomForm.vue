@@ -42,7 +42,7 @@
         <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
           <!-- 年次登録 -->
           <div class="flex">
-            <div class="text-subtitle-1 font-weight-bold">収入を登録</div>
+            <div class="text-subtitle-1 font-weight-bold">登録</div>
             <!-- 年月チップ -->
             <v-chip size="large" variant="tonal" class="font-weight-bold">
               {{ year }}年 {{ month }}月
@@ -52,7 +52,7 @@
           <v-divider class="my-4"/>
 
           <!-- 年次セレクタ -->
-          <div>
+          <div class="flex">
             <v-select
               v-model="year"
               :items="yearItems"
@@ -69,7 +69,7 @@
             />
           </div>
 
-          <div class="text-subtitle-1 font-weight-bold">登録内容</div>
+          <!-- <div class="text-subtitle-1 font-weight-bold"></div> -->
           <v-divider class="my-3"/>
 
           <!-- 金額入力 -->
@@ -88,7 +88,7 @@
             v-model="form.category"
             :items="incomeCategories"
             lebel="カテゴリ"
-            placeholder="選んでね"
+            placeholder="カテゴリ"
             variant="outlined"
             density="comfortable"
             class="mt-3"
@@ -98,21 +98,21 @@
           <v-text-field
             v-model="form.note"
             lebel="メモ（任意）"
-            placeholder="例）給与、ボーナス、副業など..."
+            placeholder="例）〇〇会社など...."
             variant="outlined"
             density="comfortable"
             rows="3"
           />
 
           <!-- 保存ボタン -->
-          <!-- <v-btn
+          <v-btn
             block
             size="large"
             :disabled="!canSave"
             @click="saveIncome"
           >
             保存
-          </v-btn> -->
+          </v-btn>
 
           <div v-if="message" class="text-center text-success mt-3">
             {{ message }}
@@ -225,7 +225,7 @@ export default {
 
 <style scoped>
 .container {
-  padding: 8px 12px 200px;
+  padding: 8px 12px 150px;
 }
 .flex {
   display: flex;

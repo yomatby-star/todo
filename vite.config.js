@@ -9,7 +9,7 @@ export default defineConfig({
       allow: [
         resolve(__dirname),
         resolve(__dirname, 'node_modules/@mdi/font'),
-        resolve(__dirname, 'node_modules/vuetify'),  // ← これを追加
+        resolve(__dirname, 'node_modules/vuetify'), 
       ]
     }
   }
