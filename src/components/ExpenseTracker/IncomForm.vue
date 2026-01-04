@@ -69,7 +69,6 @@
             />
           </div>
 
-          <!-- <div class="text-subtitle-1 font-weight-bold"></div> -->
           <v-divider class="my-3"/>
 
           <!-- 金額入力 -->
