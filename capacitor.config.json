@@ -1,0 +1,9 @@
+{
+  "appId": "com.shigoto.todo",
+  "appName": "Todo",
+  "webDir": "dist",
+  "server": {
+    "url": "http://100.64.1.40:5173/",
+    "cleartext": true
+  }
+}
