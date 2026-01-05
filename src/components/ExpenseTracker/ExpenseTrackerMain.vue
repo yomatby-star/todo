@@ -261,7 +261,7 @@ export default {
   background: rgba(0,0,0,0.03);
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 14px;
-  padding: 8px 10px;
+  padding: 8px 5px;
 }
 .label {
   font-size: 12px;
