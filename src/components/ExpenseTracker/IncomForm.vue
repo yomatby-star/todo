@@ -159,7 +159,7 @@ export default {
       monthPickerOpen: false,
       form: {
         amount: null,
-        categry: "給与",
+        category: "給与",
         note: ""
       },
       incomes: [],

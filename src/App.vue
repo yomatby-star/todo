@@ -18,8 +18,11 @@ export default {
       return (
         p.startsWith("/ExpenseTracker") ||
         p.startsWith("/incomForm") ||
-        p.startsWith("/expenseListView")
+        p.startsWith("/expenseListView") 
       )
+    },
+    isHomeActive () {
+      return this.$route.path.startsWith("/ExpenseTracker")
     },
     isIncomeActive () {
       return this.$route.path.startsWith("/incomForm")
@@ -27,20 +30,15 @@ export default {
     isExpenseActive () {
       return this.$route.path.startsWith("/expenseListView")
     },
+    // 下のナビ用（家計簿エリア全体）
+    isExpenseNavActive () {
+      return this.isExpenseArea
+    },
     isTasksActive () {
       return this.$route.path.startsWith("/tasks")
     },
     isMemoActive () {
       return this.$route.path.startsWith("/memo")
-    },
-    isExpenseTrackerActive () {
-      // 家計簿エリア配下（収入/支出含む）なら家計簿をアクティブ扱いにする例
-      const p = this.$route.path
-      return (
-        p.startsWith("/ExpenseTracker") ||
-        p.startsWith("/incomForm") ||
-        p.startsWith("/expenseListView")
-      )
     },
   },
   methods: {
@@ -59,6 +57,16 @@ export default {
     <!-- 家計簿のみ描画 -->
     <v-card v-if="isExpenseArea" class="bottom-bar" elevation="4" rounded="lg">
       <div class="btn-row">
+        <v-btn
+          class="flex-1"
+          :class="{ activeBtn: isHomeActive }"
+          :variant="isHomeActive ? 'flat' : 'outlined'"
+          :color="isHomeActive ? 'primary' : undefined"
+          @click="go('/ExpenseTracker')"
+        >
+          ホーム
+        </v-btn>
+
         <v-btn
           class="flex-1"
           :class="{ activeBtn: isIncomeActive }"
@@ -101,7 +109,7 @@ export default {
 
       <button
         class="navItem"
-        :class="{ activeNav: isExpenseTrackerActive }"
+        :class="{ activeNav: isExpenseNavActive }"
         @click="go('/ExpenseTracker')"
       >
         家計簿

@@ -46,7 +46,7 @@
         <!-- 支出オプションボタン一覧を表示（） -->
         <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
           <div class="flex">
-            <div class="text-subtitle-1 font-weight-bold">支出を登録</div>
+            <div class="text-subtitle-1 font-weight-bold">支出登録</div>
             <!-- 年月チップ（押すと月変更UI表示） -->
             <v-chip size="large" variant="tonal" class="font-weight-bold" @click="openMonthPicker">
               {{ year }}年 {{ month }}月
