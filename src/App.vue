@@ -139,6 +139,7 @@ export default {
 <style scoped>
 .app {
   min-height: 100vh;
+  background-color: #cfc9c980;
 }
 .buttonNav {
   position: fixed;
@@ -150,7 +151,7 @@ export default {
   align-items: center;
   justify-content: space-around;
   gap: 10px;
-  background-color: rgba(255, 255, 255, 0.92);
+  background-color: rgba(243, 240, 245, 0.292);
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 18px;
   padding: 10px;
