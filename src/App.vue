@@ -154,9 +154,9 @@ export default {
   transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
 }
 .nav-item:active{ background:#f2f2f2; }
-.navItem:hover {
+/* .navItem:hover {
   background: #f3f4f6;
-}
+} */
 .navItem:active {
   transform: translateY(1px);
   box-shadow: 0 3px 8px rgba(0,0,0,0.12);
