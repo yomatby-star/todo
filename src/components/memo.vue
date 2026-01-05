@@ -155,7 +155,7 @@
           </v-col>
         </v-row>
 
-        <!-- ✅ 下に固定のヒント（スマホでの操作を良くする） -->
+        
         <v-card class="composerHint" rounded="xl" elevation="0">
           <div class="hintRow">
             <v-icon size="18" class="mr-2">mdi-lightbulb-outline</v-icon>
@@ -175,7 +175,7 @@ export default {
     return {
       memos: [],
       selectedId: null,
-      query: "", // ✅ 検索（UX）
+      query: "",
     }
   },
 
@@ -183,7 +183,7 @@ export default {
     const saved = localStorage.getItem("memos_v1")
     this.memos = saved ? JSON.parse(saved) : []
 
-    // ✅ 起動時に1件目を自動選択（UX）
+    // 起動時に1件目を自動選択
     if (this.memos.length > 0) {
       this.selectedId = this.memos[0].id
     }
@@ -203,7 +203,7 @@ export default {
       return this.memos.find((m) => m.id === this.selectedId) || null
     },
 
-    // ✅ 検索結果（タイトル＋本文で検索）
+    // 検索結果（タイトル＋本文で検索）
     filteredMemos() {
       const q = this.query.trim().toLowerCase()
       if (!q) return this.memos
@@ -267,22 +267,21 @@ export default {
       const date = Date.now()
       this.currentMemo.updatedAt = date
 
-      // 1行目をタイトルにする（あなたの仕様そのまま）
+      // 1行目をタイトル
       const firstLine = (this.currentMemo.body || "").split("\n")[0].trim()
       this.currentMemo.title = firstLine || "新規メモ"
 
-      // 最新順に並べ替え（UX）
+      // 最新順に並べ替え
       this.memos.sort((a, b) => b.updatedAt - a.updatedAt)
     },
 
-    // ✅ コピー（あると気持ちいい）
+    // コピー
     async copyCurrent() {
       if (!this.currentMemo) return
       const text = this.currentMemo.body || ""
       try {
         await navigator.clipboard.writeText(text)
       } catch (_) {
-        // クリップボード不可の環境でも落とさない
       }
     },
   },
