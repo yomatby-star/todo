@@ -2,7 +2,9 @@
   <v-container class="container">
     <v-row justify="center">
       <v-col cols="12" md="6">
+
         <!-- 明細リスト -->
+        <!-- 支出合計が見れる場所※カレンダーで日付変更して確認可能 -->
         <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
           <div>
             <!-- 今月合計 -->
@@ -16,104 +18,80 @@
 
           <v-divider class="my-3"/>
 
-          <v-list v-if="monthIncomes.length">
-            <v-list-item v-for="it in monthIncomes" :key="it.id">
+          <!-- 登録内容表示 -->
+          <v-list v-if="monthExpenses.length">
+            <v-list-item v-for="m in monthExpenses" :key="m.id">
               <v-list-item-title class="flex">
-                <span>{{ it.category }} <span class="text-medium-emphasis">- {{ it.note }}</span></span>
-                <span class="font-weight-bold">{{ formatYen(it.amount) }} 円</span>
+                <span>{{ m.category }} <span> - {{ m.note }}</span></span>
+                <span>{{ formatYen(m.amount) }}円</span>
               </v-list-item-title>
 
               <v-list-item-subtitle>
-                登録 {{ formatDate(it.createdAt) }}
+                {{ formatDate(m.createdAt) }}
               </v-list-item-subtitle>
 
               <template #append>
-                <v-btn icon="mdi-delete" variant="text" color="red" @click.stop="removeIncome(it.id)"/>
+                <v-btn icon="mdi-delete" color="red" variant="text" @click="removeOnExpense(m.id)"></v-btn>
               </template>
             </v-list-item>
           </v-list>
 
           <div v-else class="text-center text-medium-emphasis">
-            収入が登録されていません
+            支出が登録されていません
           </div>
         </v-card>
 
-        <!-- 入力フォーム -->
+
+
+        <!-- 支出オプションボタン一覧を表示（） -->
         <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
-          <!-- 年次登録 -->
           <div class="flex">
-            <div class="text-subtitle-1 font-weight-bold">収入登録</div>
-            <!-- 年月チップ -->
+            <div class="text-subtitle-1 font-weight-bold">支出を登録</div>
+            <!-- 年月チップ（押すと月変更UI表示） -->
             <v-chip size="large" variant="tonal" class="font-weight-bold" @click="openMonthPicker">
               {{ year }}年 {{ month }}月
               <v-icon end>mdi-chevron-down</v-icon>
             </v-chip>
           </div>
 
-          <v-divider class="my-4"/>
+          <v-divider class="my-3"/>
 
-          <!-- 年次セレクタ -->
-          <!-- <div class="flex">
-            <v-select
-              v-model="year"
-              :items="yearItems"
-              label="年"
-              variant="outlined"
-              density="comfortable"
-            />
-            <v-select
-              v-model="month"
-              :items="monthItems"
-              label="月"
-              variant="outlined"
-              density="comfortable"
-            />
-          </div> -->
-
-          
           <div class="flex">
-            <!-- カテゴリ選択 -->
+            <!-- カテゴリ -->
             <v-select
               v-model="form.category"
-              :items="incomeCategories"
-              lebel="カテゴリ"
+              :items="onExpenseCategories"
+              label="カテゴリ"
               placeholder="カテゴリ"
               variant="outlined"
             />
 
-            <!-- 金額入力 -->
+            <!-- 金額 -->
             <v-text-field
               v-model.number="form.amount"
               type="number"
-              lebel="金額"
-              placeholder="例）300000"
+              label="金額"
+              placeholder="例）25000"
               variant="outlined"
             />
           </div>
 
-          <!-- メモ -->
-          <v-text-field
-            v-model="form.note"
-            lebel="メモ（任意）"
-            placeholder="例）〇〇会社など...."
-            variant="outlined"
-            density="comfortable"
-            rows="3"
-          />
+            <!-- メモ -->
+            <v-text-field
+              v-model="form.note"
+              label="メモ（任意）"
+              placeholder="任意"
+              variant="outlined"
+            />
 
-          <!-- 保存ボタン -->
-          <v-btn
-            block
-            size="large"
-            :disabled="!canSave"
-            @click="saveIncome"
-          >
+            <v-btn
+              block
+              size="large"
+              :disabled="!canSave"
+              @click="saveOnExpense"
+            >
             保存
-          </v-btn>
-
-          <div v-if="message" class="text-center text-success mt-3">
-            {{ message }}
-          </div>
+            </v-btn>
         </v-card>
       </v-col>
     </v-row>
@@ -145,11 +123,10 @@
   </v-container>
 </template>
 
-
 <script>
-import Mixin from "../../mixin.js/mixin"
+import Mixin from '../../mixin.js/mixin'
 export default {
-  name: "IncomeForm",
+  name: "expenseListView",
   mixins: [Mixin],
   data () {
     const { year, month } = this.getCurrentYearMonth()
@@ -159,23 +136,22 @@ export default {
       monthPickerOpen: false,
       form: {
         amount: null,
-        categry: "給与",
+        category: "家賃",
         note: ""
       },
-      incomes: [],
-      message: "",
-      incomeCategories: ["給与","ボーナス","副業","臨時収入","その他"]
+      onExpense: [],
+      onExpenseCategories: ["家賃","光熱費","携帯代","猫","住民税","食費","接待費","雑費","ジム","その他"]
     }
   },
   mounted() {
-    const saved = localStorage.getItem("income_v1")
-    this.incomes = saved ? JSON.parse(saved) : []
+    const saved = localStorage.getItem("onexpense_v1")
+    this.onExpense = saved ? JSON.parse(saved) : []
   },
   watch: {
-    incomes: {
+    onExpense: {
       deep: true,
-      handler (val) {
-        localStorage.setItem("income_v1", JSON.stringify(val))
+      handler(val) {
+        localStorage.setItem("onexpense_v1", JSON.stringify(val))
       }
     }
   },
@@ -191,19 +167,19 @@ export default {
     monthItems () {
       return [1,2,3,4,5,6,7,8,9,10,11,12]
     },
-    // 金額合計
+    // 成形
     monthKey () {
       // "2026-01" みたいな形式に統一
       const mm = String(this.month).padStart(2, "0")
       return `${this.year}-${mm}`
     },
-    monthIncomes () {
-      // 選択中の月だけ
-      const now = new Date()
-      return this.incomes.filter((x) => x.monthKey === this.monthKey).sort((a,b) => b.now === a.now)
+    monthExpenses () {
+      return this.onExpense
+        .filter(x => x.monthKey === this.monthKey)
+        .sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0))
     },
     monthTotal () {
-      return this.monthIncomes.reduce((sum, x) => sum + (Number(x.amount) || 0), 0)
+      return this.monthExpenses.reduce((sum, x) => sum + (Number(x.amount) || 0), 0)
     },
     canSave() {
       const a = Number(this.form.amount)
@@ -216,8 +192,12 @@ export default {
       const num = Number(n) || 0
       return num.toLocaleString("ja-JP")
     },
-    // 登録内容保存
-    saveIncome () {
+    openMonthPicker() {
+      // this.monthInput = this.ym
+      this.monthPickerOpen = true
+    },
+    // 保存処理
+    saveOnExpense() {
       const item = {
         id: this.makeId(),
         monthKey: this.monthKey,
@@ -227,26 +207,23 @@ export default {
         createdAt: Date.now()
       }
       console.log("item:", item)
-      this.incomes.unshift(item)
-      console.log("incomes[0]:", this.incomes[0]);
-      console.log("length:", this.incomes.length);
-      console.log("all:", this.incomes);
+      this.onExpense.unshift(item)
+      console.log("onExpense[0]:", this.onExpense[0]);
+      console.log("length:", this.onExpense.length);
+      console.log("all:", this.onExpense);
       console.log("保存されたアイテム:", item)
       this.form.amount = ""
       this.form.note = ""
       this.message = "保存完了"
       setTimeout(() => (this.message = ""), 1200)
     },
-    // 削除アイコン
-    removeIncome (id) {
-      this.incomes = this.incomes.filter((x) => x.id !== id)
-    },
-    openMonthPicker() {
-      this.monthPickerOpen = true
+    removeOnExpense(id) {
+      this.onExpense = this.onExpense.filter((x) => x.id !== id)
     }
-  }
+  },
 }
 </script>
+
 
 <style scoped>
 .container {

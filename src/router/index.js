@@ -3,6 +3,7 @@ import Todo from '../components/todo.vue'
 import Memo from '../components/memo.vue'
 import ExpenseTracker from '../components/ExpenseTracker/ExpenseTrackerMain.vue'
 import IncomForm from '../components/ExpenseTracker/IncomForm.vue'
+import ExpenseListView from '../components/ExpenseTracker/ExpenseListView.vue'
 
 const routes = [
   { path: '/', redirect: '/tasks' },
@@ -10,6 +11,7 @@ const routes = [
   { path: '/memo', name: 'memo', component: Memo },
   { path: '/expenseTracker', name: 'ExpenseTracker', component: ExpenseTracker },
   { path: '/incomForm', name: 'IncomForm', component: IncomForm },
+  { path: '/expenseListView', name: 'ExpenseListView', component: ExpenseListView },
 ]
 
 const router = createRouter({

@@ -2,7 +2,6 @@
 import Todo from './components/todo.vue'
 import Memo from './components/memo.vue'
 import ExpenseTracker from './components/ExpenseTracker/ExpenseTrackerMain.vue'
-import { useRouter } from 'vue-router'
 import Mixin from "./mixin.js/mixin"
 
 export default {
@@ -18,9 +17,31 @@ export default {
       const p = this.$route.path
       return (
         p.startsWith("/ExpenseTracker") ||
-        p.startsWith("/incomForm")
+        p.startsWith("/incomForm") ||
+        p.startsWith("/expenseListView")
       )
-    }
+    },
+    isIncomeActive () {
+      return this.$route.path.startsWith("/incomForm")
+    },
+    isExpenseActive () {
+      return this.$route.path.startsWith("/expenseListView")
+    },
+    isTasksActive () {
+      return this.$route.path.startsWith("/tasks")
+    },
+    isMemoActive () {
+      return this.$route.path.startsWith("/memo")
+    },
+    isExpenseTrackerActive () {
+      // 家計簿エリア配下（収入/支出含む）なら家計簿をアクティブ扱いにする例
+      const p = this.$route.path
+      return (
+        p.startsWith("/ExpenseTracker") ||
+        p.startsWith("/incomForm") ||
+        p.startsWith("/expenseListView")
+      )
+    },
   },
   methods: {
     go(path) {
@@ -38,17 +59,59 @@ export default {
     <!-- 家計簿のみ描画 -->
     <v-card v-if="isExpenseArea" class="bottom-bar" elevation="4" rounded="lg">
       <div class="btn-row">
-        <v-btn class="flex-1" variant="outlined" @click="go('/incomForm')">収入</v-btn>
-        <v-btn class="flex-1" variant="outlined" @click="onExpense">支出</v-btn>
+        <v-btn
+          class="flex-1"
+          :class="{ activeBtn: isIncomeActive }"
+          :variant="isIncomeActive ? 'flat' : 'outlined'"
+          :color="isIncomeActive ? 'primary' : undefined"
+          @click="go('/incomForm')"
+        >
+          収入
+        </v-btn>
+
+        <v-btn
+          class="flex-1"
+          :class="{ activeBtn: isExpenseActive }"
+          :variant="isExpenseActive ? 'flat' : 'outlined'"
+          :color="isExpenseActive ? 'primary' : undefined"
+          @click="go('/expenseListView')"
+        >
+          支出
+        </v-btn>
+
       </div>
     </v-card>
     <!-- 常に描画 -->
     <nav class="buttonNav">
-      <button class="navItem" @click="go('/tasks')">タスク</button>
-      <button class="navItem" @click="go('/memo')">メモ</button>
-      <button class="navItem" @click="go('/ExpenseTracker')">家計簿</button>
-      <button class="navItem">カレンダー</button>
+      <button
+        class="navItem"
+        :class="{ activeNav: isTasksActive }"
+        @click="go('/tasks')"
+      >
+        タスク
+      </button>
+
+      <button
+        class="navItem"
+        :class="{ activeNav: isMemoActive }"
+        @click="go('/memo')"
+      >
+        メモ
+      </button>
+
+      <button
+        class="navItem"
+        :class="{ activeNav: isExpenseTrackerActive }"
+        @click="go('/ExpenseTracker')"
+      >
+        家計簿
+      </button>
+
+      <button class="navItem">
+        カレンダー
+      </button>
     </nav>
+
   </div>
 </template>
 
@@ -116,4 +179,16 @@ export default {
 .flex-1 {
   flex: 1;
 }
+
+.activeBtn {
+  transform: translateY(-1px);
+}
+.activeNav {
+  background: #637ec6;
+  color: #eceff4;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+}
+
+
 </style>
