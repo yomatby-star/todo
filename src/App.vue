@@ -139,7 +139,6 @@ export default {
 <style scoped>
 .app {
   min-height: 100vh;
-  background-color: #f6f7fb;
 }
 .buttonNav {
   position: fixed;

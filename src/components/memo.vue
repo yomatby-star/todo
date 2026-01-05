@@ -295,7 +295,7 @@ export default {
     radial-gradient(1200px 600px at 20% 0%, rgba(130, 170, 255, 0.12), transparent 50%),
     radial-gradient(1000px 500px at 80% 10%, rgba(180, 140, 255, 0.10), transparent 55%),
     radial-gradient(900px 500px at 40% 90%, rgba(120, 220, 200, 0.08), transparent 60%),
-    #0e1116;
+    #2c3442;
 }
 
 .mainContainer{
