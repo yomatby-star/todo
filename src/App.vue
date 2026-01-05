@@ -92,33 +92,46 @@ export default {
     <!-- 常に描画 -->
     <nav class="buttonNav">
       <button
-        class="navItem"
+        class="navItem iconNav"
         :class="{ activeNav: isTasksActive }"
         @click="go('/tasks')"
+        aria-label="タスク"
       >
-        タスク
+        <v-icon size="22">mdi-format-list-checks</v-icon>
+        <!-- <span class="navLabel">タスク</span> -->
       </button>
 
       <button
-        class="navItem"
+        class="navItem iconNav"
         :class="{ activeNav: isMemoActive }"
         @click="go('/memo')"
+        aria-label="メモ"
       >
-        メモ
+        <v-icon size="22">mdi-note-text</v-icon>
+        <!-- <span class="navLabel">メモ</span> -->
       </button>
 
       <button
-        class="navItem"
+        class="navItem iconNav"
         :class="{ activeNav: isExpenseNavActive }"
         @click="go('/ExpenseTracker')"
+        aria-label="家計簿"
       >
-        家計簿
+        <v-icon size="22">mdi-cash-multiple</v-icon>
+        <!-- <span class="navLabel">家計簿</span> -->
       </button>
 
-      <button class="navItem">
-        カレンダー
+      <button
+        class="navItem iconNav"
+        :class="{ activeNav: isCalendarActive }"
+        @click="go('/calendar')"
+        aria-label="カレンダー"
+      >
+        <v-icon size="22">mdi-calendar-month</v-icon>
+        <!-- <span class="navLabel">カレンダー</span> -->
       </button>
     </nav>
+
 
   </div>
 </template>

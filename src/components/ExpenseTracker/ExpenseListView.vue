@@ -232,7 +232,7 @@ export default {
 
 <style scoped>
 .container {
-  padding: 8px 12px 150px;
+  padding: 8px 12px 180px;
 }
 .flex {
   display: flex;

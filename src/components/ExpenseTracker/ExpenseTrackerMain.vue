@@ -20,16 +20,16 @@
           <div class="summary">
             <div class="summaryBox">
               <div class="label">収入</div>
-              <div class="value">{{ formatYen(incomeTotal) }}</div>
+              <div class="value">{{ formatYen(incomeTotal) }} 円</div>
             </div>
             <div class="summaryBox">
               <div class="label">支出</div>
-              <div class="value">{{ formatYen(expenseTotal) }}</div>
+              <div class="value">{{ formatYen(expenseTotal) }} 円</div>
             </div>
             <div class="summaryBox">
               <div class="label">収支</div>
               <div class="value" :class="{ minus: balance < 0 }">
-                {{ formatYen(balance) }}
+                {{ formatYen(balance) }} 円
               </div>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default {
 
 <style scoped>
 .container {
-  padding: 8px 12px 150px;
+  padding: 8px 12px 180px;
 }
 .summary {
   display: grid;
