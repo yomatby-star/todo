@@ -271,6 +271,7 @@ export default {
   font-size: 18px;
   font-weight: 800;
   margin-top: 4px;
+  white-space: nowrap;
 }
 .value.minus {
   color: #f30303;
