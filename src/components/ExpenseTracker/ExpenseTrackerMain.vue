@@ -250,7 +250,7 @@ export default {
 
 <style scoped>
 .container {
-  height: 100vh;
+  /* height: 100vh; */
   padding: 8px 12px 180px;
 }
 .summary {
