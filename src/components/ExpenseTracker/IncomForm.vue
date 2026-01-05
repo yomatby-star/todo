@@ -76,7 +76,7 @@
             <v-select
               v-model="form.category"
               :items="incomeCategories"
-              lebel="カテゴリ"
+              label="カテゴリ"
               placeholder="カテゴリ"
               variant="outlined"
             />
@@ -85,7 +85,7 @@
             <v-text-field
               v-model.number="form.amount"
               type="number"
-              lebel="金額"
+              label="金額"
               placeholder="例）300000"
               variant="outlined"
             />
@@ -95,10 +95,10 @@
           <v-text-field
             v-model="form.note"
             lebel="メモ（任意）"
-            placeholder="例）〇〇会社など...."
+            placeholder="任意"
             variant="outlined"
-            density="comfortable"
-            rows="3"
+            
+            
           />
 
           <!-- 保存ボタン -->

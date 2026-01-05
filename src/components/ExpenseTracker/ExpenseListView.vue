@@ -92,6 +92,10 @@
             >
             保存
             </v-btn>
+
+            <div v-if="message" class="text-center text-success mt-3">
+            {{ message }}
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -140,6 +144,7 @@ export default {
         note: ""
       },
       onExpense: [],
+      message: "",
       onExpenseCategories: ["家賃","光熱費","携帯代","猫","住民税","食費","接待費","雑費","ジム","その他"]
     }
   },

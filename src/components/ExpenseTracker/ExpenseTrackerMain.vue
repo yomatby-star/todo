@@ -4,7 +4,7 @@
       <v-col>
         <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
           <div class="d-flex align-center justify-space-between mb-3">
-            <div class="text-subtitle-1 font-weight-bold">今月の収支（カテゴリ別）</div>
+            <div class="text-subtitle-1 font-weight-bold">収支表</div>
             <v-chip
               variant="tonal"
               class="font-weight-bold"
@@ -20,16 +20,16 @@
           <div class="summary">
             <div class="summaryBox">
               <div class="label">収入</div>
-              <div class="value">{{ formatYen(incomeTotal) }} 円</div>
+              <div class="value">{{ formatYen(incomeTotal) }}</div>
             </div>
             <div class="summaryBox">
               <div class="label">支出</div>
-              <div class="value">{{ formatYen(expenseTotal) }} 円</div>
+              <div class="value">{{ formatYen(expenseTotal) }}</div>
             </div>
             <div class="summaryBox">
               <div class="label">収支</div>
               <div class="value" :class="{ minus: balance < 0 }">
-                {{ formatYen(balance) }} 円
+                {{ formatYen(balance) }}
               </div>
             </div>
           </div>
@@ -37,7 +37,7 @@
           <v-divider class="my-4" />
 
           <!-- 支出カテゴリ -->
-          <div class="sectionTitle">支出カテゴリ（上位）</div>
+          <div class="sectionTitle">支出（上位）</div>
           <div v-if="expenseBreakdown.length === 0" class="empty">
             支出がまだありません
           </div>
@@ -61,7 +61,7 @@
           <v-divider class="my-4" />
 
           <!-- 収入カテゴリ -->
-          <div class="sectionTitle">収入カテゴリ（上位）</div>
+          <div class="sectionTitle">収入（上位）</div>
           <div v-if="incomeBreakdown.length === 0" class="empty">
             収入がまだありません
           </div>
@@ -255,13 +255,13 @@ export default {
 .summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 6px;
 }
 .summaryBox {
   background: rgba(0,0,0,0.03);
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 14px;
-  padding: 10px 12px;
+  padding: 8px 10px;
 }
 .label {
   font-size: 12px;
@@ -273,7 +273,7 @@ export default {
   margin-top: 4px;
 }
 .value.minus {
-  color: #d14b4b;
+  color: #f30303;
 }
 
 .sectionTitle {
@@ -323,6 +323,6 @@ export default {
 }
 
 /* 色分け（支出=赤系、収入=青系） */
-.barFill.expense { background: #ff6b6b; }
-.barFill.income  { background: #4f8ef7; }
+.barFill.expense { background: #a45ada; }
+.barFill.income  { background: #3c72ce; }
 </style>
