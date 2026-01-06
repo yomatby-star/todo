@@ -7,7 +7,7 @@
         <!-- タスク一覧 -->
         <v-card elevation="2" class="taskCard">
           <div class="subHeader">
-            <div class="subTitleText">タスク一覧</div>
+            <div class="subTitleText">TODO</div>
             <div class="counts">
               <span class="countPill">
                 <span class="pillLabel">未完了</span>
@@ -61,7 +61,7 @@
                   icon
                   color="red"
                   variant="text"
-                  @click="removeTask(task)"
+                  @click="openDeleteDialog(task)"
                   aria-label="削除"
                 >
                   <v-icon>mdi-delete</v-icon>
@@ -101,6 +101,19 @@
             </v-col>            
           </v-row>
         </v-card>
+
+        <!-- 削除ダイアログ -->
+        <v-dialog v-model="deleteDialog" max-width="420">
+          <v-card elevation="4" rounded="lg" class="confirmCard">
+            <v-card-text>
+              {{ deletingTask?.text }} を削除します。
+            </v-card-text>
+            <v-card-actions>
+              <v-btn variant="text" @click="cancelDelete">キャンセル</v-btn>
+              <v-btn color="red" variant="flat" @click="confirmDelete">削除</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-main>
   </v-app>
@@ -113,6 +126,8 @@ export default {
     return {
       newTask: '',
       tasks: [],
+      deleteDialog: false,
+      deletingTask: null,
     }
   },
   mounted () {
@@ -155,6 +170,11 @@ export default {
         this.newTask = '';
       }
     },
+    confirmDelete () {
+      this.removeTask(this.deletingTask)
+      this.deletingTask = null
+      this.deleteDialog = false
+    },
     removeTask (task) {
       this.tasks = this.tasks.filter(i => i !== task)
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
@@ -169,6 +189,17 @@ export default {
       task.status = false
       task.completed_at = null
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
+    },
+    openDeleteDialog (task) {
+      // console.log("ダイアログ")
+      this.deletingTask = task
+      // console.log(this.deletingTask)
+      this.deleteDialog = true
+      // console.log(this.deleteDialog)
+    },
+    cancelDelete () {
+      this.deletingTask = null
+      this.deleteDialog = false
     }
   }
 }
@@ -221,9 +252,6 @@ export default {
   background: transparent !important;
 }
 
-
-
-/* ===== カードサイズ ===== */
 .taskCard {
   max-height: 65vh;
   margin: 0 0 16px;
@@ -235,8 +263,6 @@ export default {
   padding: 6px 0 40px;
 }
 
-/* ===== 見出し：黒ベタじゃなく“ダークガラス帯”に ===== */
-/* ===== Header（ダークガラス帯を“高級感”に） ===== */
 .subHeader {
   display: flex;
   align-items: center;
@@ -411,5 +437,15 @@ export default {
 :deep(.v-btn) {
   box-shadow: none;
 }
+
+.confirmCard {
+  background: rgba(18, 20, 32, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.90);
+}
+
 
 </style>

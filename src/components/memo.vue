@@ -5,7 +5,7 @@
       <v-col cols="12" md="4">
         <v-card class="pa-3 mainCard" elevation="2" rounded="xl">
           <div class="d-flex align-center justify-space-between">
-            <div class="text-h6">Memo</div>
+            <div class="text-h6">MEMO</div>
 
             <!-- ＋で新規作成 → ダイアログを開く -->
             <!-- <v-btn icon variant="text" @click="createMemoAndOpen()">
