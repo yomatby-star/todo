@@ -36,7 +36,7 @@
                   variant="text"
                   @click.stop="removeMemo(m.id)"
                 >
-                  <v-icon>mdi-delete</v-icon>
+                  <v-icon color="red">mdi-delete</v-icon>
                 </v-btn>
               </template>
             </v-list-item>
@@ -75,7 +75,7 @@
             @click="removeMemo(currentMemo.id); closeEditor()"
             aria-label="削除"
           >
-            <v-icon>mdi-delete</v-icon>
+            <v-icon color="red">mdi-delete</v-icon>
           </v-btn>
         </v-toolbar>
 
@@ -240,9 +240,9 @@ export default {
     linear-gradient(180deg, rgba(230, 230, 235, 0.98), rgba(176, 176, 179, 0.98));
 }
 .listsArea {
-  max-height: 65vh;
+  max-height: 60vh;
   overflow: auto;
-  padding: 4px 0;
+  padding: 0;
   background:
     radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
     radial-gradient(900px 500px at 85% 25%, rgba(190, 196, 198, 0.18), transparent 55%),
