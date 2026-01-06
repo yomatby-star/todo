@@ -196,8 +196,6 @@ export default {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 18px;
-
-
   padding: 10px;
   position: fixed;
   bottom: 90px;
@@ -207,11 +205,9 @@ export default {
   max-width: 600px;
   z-index: 1000;
 }
-
-/* これが一番安定：v-card要素に直撃させる */
 :deep(.v-card.taskCard) {
   background-color: rgba(18, 20, 32, 0.55) !important;
-  background-image: none !important; /* 念のため */
+  background-image: none !important;
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow:
     0 14px 40px rgba(0, 0, 0, 0.45),

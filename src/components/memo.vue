@@ -1,21 +1,21 @@
 <template>
-  <v-container class="py-4">
+  <v-container class="py-4 mainContainer">
     <v-row>
       <!-- 左：メモ一覧 -->
       <v-col cols="12" md="4">
-        <v-card class="pa-3" elevation="2" rounded="xl">
+        <v-card class="pa-3 mainCard" elevation="2" rounded="xl">
           <div class="d-flex align-center justify-space-between">
-            <div class="text-h6">メモ</div>
+            <div class="text-h6">Memo</div>
 
             <!-- ＋で新規作成 → ダイアログを開く -->
-            <v-btn icon variant="text" @click="createMemoAndOpen()">
+            <!-- <v-btn icon variant="text" @click="createMemoAndOpen()">
               <v-icon>mdi-plus</v-icon>
-            </v-btn>
+            </v-btn> -->
           </div>
 
           <v-divider class="my-2" />
 
-          <v-list v-if="memos.length > 0">
+          <v-list v-if="memos.length > 0" class="listsArea">
             <v-list-item
               v-for="m in memos"
               :key="m.id"
@@ -47,8 +47,6 @@
           </div>
         </v-card>
       </v-col>
-
-      
     </v-row>
 
     <!-- 編集ダイアログ -->
@@ -104,6 +102,16 @@
       </v-card>
     </v-dialog>
 
+    <!-- ＋ボタン配置 -->
+    <v-btn
+      class="fabAdd"
+      icon
+      size="large"
+      @click="createMemoAndOpen()"
+      aria-label="新規メモ"
+    >
+      <v-icon color="white">mdi-plus</v-icon>
+    </v-btn>
   </v-container>
 </template>
 
@@ -205,3 +213,39 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.mainContainer {
+  height: 100vh;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
+    radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
+}
+.fabAdd {
+  position: fixed;
+  right: 8px;
+  bottom: 90px;
+  z-index: 2000;
+  background: rgba(147, 151, 197, 0.72) !important;
+  border:  1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55);
+}
+.mainCard {
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
+    radial-gradient(900px 500px at 85% 25%, rgba(105, 124, 132, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(230, 230, 235, 0.98), rgba(176, 176, 179, 0.98));
+}
+.listsArea {
+  max-height: 65vh;
+  overflow: auto;
+  padding: 4px 0;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
+    radial-gradient(900px 500px at 85% 25%, rgba(190, 196, 198, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(230, 230, 235, 0.98), rgba(176, 176, 179, 0.98));
+}
+</style>>
