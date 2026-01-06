@@ -151,7 +151,7 @@ export default {
   align-items: center;
   justify-content: space-around;
   gap: 10px;
-  background-color: rgba(243, 240, 245, 0.292);
+  background-color: rgba(243, 240, 245, 0.924);
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 18px;
   padding: 10px;

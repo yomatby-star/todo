@@ -9,69 +9,51 @@
           <h2 class="subTitle">タスク一覧</h2>
           <v-list class="taskScroll">
             <v-list-item 
-              v-for="(task, index) in incompleteTasks"
+              v-for="(task, index) in sortedTasks"
               :key="index"
+              :class="{computed: task.status}"
             >
               <v-list-item-title class="task-text">
                 {{ task.text }}
               </v-list-item-title>
               <v-list-item-subtitle class="task-date">
                 {{ task.created_at }}
+                <span v-if="task.status && task.completed_at"> / 完了: {{ task.completed_at }}</span>
               </v-list-item-subtitle>
+
               <template #append>
                 <v-btn
+                  v-if="!task.status"
                   icon
                   color="blue"
-                  variant="text"
+                  variant="test"
                   @click="completeTask(task)"
+                  aria-label="完了"
                 >
-                  <v-text>完了</v-text>
+                  <v-icon>mdi-check</v-icon>
                 </v-btn>
-                <v-btn
-                  icon
-                  color="red"
-                  variant="text"
-                  @click="removeTask(task)"
-                >
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </template>
-            </v-list-item>
-          </v-list>
-        </v-card>
 
-        <!-- 完了描画 -->
-        <v-card elevation="2" rounded="lg" class="taskCard sub">
-          <h2 class="subTitle">完了済み</h2>
-          <v-list class="taskScroll">
-            <v-list-item
-              v-for="task in completedTasks"
-              :key="task.text"
-            >
-              <v-list-item-title class="task-text">
-                {{ task.text }}
-              </v-list-item-title>
-              <v-list-item-subtitle class="task-date">
-                {{ task.created_at }}
-              </v-list-item-subtitle>
-
-              <template #append>
                 <v-btn
+                  v-else
                   icon
                   color="green"
                   variant="text"
                   @click="restoreTask(task)"
+                  aria-label="戻す"
                 >
                   <v-icon>mdi-undo</v-icon>
                 </v-btn>
+
                 <v-btn
-                  icon
+                  icom
                   color="red"
                   variant="text"
-                  @click="removeTask(task)"
+                  @click=removeTask(task)
+                  aria-label="削除"
                 >
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
+                
               </template>
             </v-list-item>
           </v-list>
@@ -80,27 +62,30 @@
         <!-- 入力カード -->
         <v-card class="inputArea" elevation="4" rounded="lg">
           <v-row align="center" no-gutters>
-            <v-col cols="9">
+            <v-col cols="12">
               <v-text-field
                 v-model="newTask"
                 label="やることを入力"
                 variant="outlined"
+                density="compact"
                 clearable
                 hide-details
                 @keyup.enter="addTask"
-              />
-            </v-col>
-            <v-col cols="3" class="pl-3">
-              <v-btn
-                color="primary"
-                block
-                rounded
-                size="large"
-                @click="addTask"
               >
-                追加
-              </v-btn>
-            </v-col>
+                <template #append-inner>
+                  <v-btn
+                    color="primary"
+                    rounded
+                    class="ml-2"
+                    :desabled="!newTask?.trim()"
+                    @click="addTask"
+                    aria-label="保存"
+                  >
+                    <v-icon size="20">mdi-send</v-icon>
+                  </v-btn>
+                </template>
+              </v-text-field>
+            </v-col>            
           </v-row>
         </v-card>
       </v-container>
@@ -109,6 +94,8 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+
 export default {
   name: 'todo',
   data () {
@@ -124,12 +111,17 @@ export default {
     }
   },
   computed: {
-    incompleteTasks () {
-      return this.tasks.filter(task => !task.status)
+    sortedTasks () {
+      const tasks = [...this.tasks]
+      tasks.sort((a, b) => a.status - b.status)
+      return tasks
     },
-    completedTasks () {
-      return this.tasks.filter(task => task.status)
-    }
+    // incompleteTasks () {
+    //   return this.tasks.filter(task => !task.status)
+    // },
+    // completedTasks () {
+    //   return this.tasks.filter(task => task.status)
+    // }
   },
   methods: {
     addTask () {
@@ -172,10 +164,10 @@ export default {
   height: 100vh;
 }
 .title {
-  text-align: center;
+  text-align: left;
   font-size: 28px;
   font-weight: bold;
-  color: #2f38c27d;
+  color: #484fb57d;
   margin: 38px 8px 8px 8px;
 }
 .task-text {
@@ -190,11 +182,11 @@ export default {
   display: flex;
 }
 .taskCard {
-  max-height: 35vh;
+  max-height: 60vh;
   margin: 0 0 20px;
 }
 .taskScroll {
-  max-height: calc(40vh - 40px);
+  max-height: calc(60vh - 40px);
   overflow-y: auto;
   padding: 0 0 40px;
 }
@@ -213,7 +205,7 @@ export default {
   color: #bbb;
 }
 .inputArea {
-  padding: 20px;
+  padding: 8px;
   position: fixed;
   bottom: 90px;
   left: 50%;
@@ -221,6 +213,10 @@ export default {
   width: calc(100% - 32px);
   max-width: 600px;
   z-index: 1000;
+}
+.computed .task-text {
+  text-decoration: line-through;
+  opacity: 0.6;
 }
 
 </style>
