@@ -183,7 +183,6 @@ export default {
     closeEditor() {
       this.editorOpen = false
       // 「一覧に戻る」イメージなら選択を残す/消すは好み
-      // 今回は選択を残しておく（次に開いたとき分かりやすい）
     },
 
     removeMemo(targetId) {
