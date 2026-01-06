@@ -121,15 +121,15 @@ export default {
         <!-- <span class="navLabel">家計簿</span> -->
       </button>
 
-      <button
+      <!-- <button
         class="navItem iconNav"
         :class="{ activeNav: isCalendarActive }"
         @click="go('/calendar')"
         aria-label="カレンダー"
       >
-        <v-icon size="22">mdi-calendar-month</v-icon>
+        <v-icon size="22">mdi-calendar-month</v-icon> -->
         <!-- <span class="navLabel">カレンダー</span> -->
-      </button>
+      <!-- </button> -->
     </nav>
 
 

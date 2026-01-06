@@ -114,8 +114,6 @@ export default {
     return {
       memos: [],
       selectedId: null,
-
-      // ダイアログの開閉
       editorOpen: false,
     }
   },
@@ -182,7 +180,6 @@ export default {
 
     closeEditor() {
       this.editorOpen = false
-      // 「一覧に戻る」イメージなら選択を残す/消すは好み
     },
 
     removeMemo(targetId) {
@@ -203,7 +200,6 @@ export default {
       const firstLine = (this.currentMemo.body || "").split("\n")[0].trim()
       this.currentMemo.title = firstLine || "新規メモ"
 
-      // 更新が新しい順に
       this.memos.sort((a, b) => b.updatedAt - a.updatedAt)
     }
   }
