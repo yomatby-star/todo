@@ -6,7 +6,20 @@
         
         <!-- タスク一覧 -->
         <v-card elevation="2" class="taskCard">
-          <h2 class="subTitle">タスク一覧</h2>
+          <div class="subHeader">
+            <div class="subTitleText">タスク一覧</div>
+            <div class="counts">
+              <span class="countPill">
+                <span class="pillLabel">未完了</span>
+                <span class="pillValue">{{ incomplateCount }}</span>
+              </span>
+              <span class="countPill">
+                <span class="pillLabel">完了</span>
+                <span class="pillValue">{{ completedCount }}</span>
+              </span>
+            
+            </div>
+          </div>
           <v-list class="taskScroll">
             <v-list-item 
               v-for="(task, index) in sortedTasks"
@@ -114,6 +127,12 @@ export default {
       tasks.sort((a, b) => a.status - b.status)
       return tasks
     },
+    incomplateCount () {
+      return this.tasks.filter(x => !x.status).length
+    },
+    completedCount () {
+      return this.tasks.filter(x => x.status).length
+    }
     // incompleteTasks () {
     //   return this.tasks.filter(task => !task.status)
     // },
@@ -210,31 +229,133 @@ export default {
 
 /* ===== カードサイズ ===== */
 .taskCard {
-  max-height: 70vh;
+  max-height: 65vh;
   margin: 0 0 16px;
 }
 
 .taskScroll {
-  max-height: calc(70vh - 52px);
+  max-height: calc(65vh - 52px);
   overflow-y: auto;
   padding: 6px 0 40px;
 }
 
 /* ===== 見出し：黒ベタじゃなく“ダークガラス帯”に ===== */
-.subTitle {
-  font-size: 14px;
-  text-align: center;
-  padding: 10px 0;
-  font-weight: 700;
-  letter-spacing: 0.6px;
+/* ===== Header（ダークガラス帯を“高級感”に） ===== */
+.subHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.86);
+  padding: 12px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+
+  /* 上品なダークガラス */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.04)
+  );
+
+  color: rgba(255, 255, 255, 0.90);
 
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
+
+.subTitleText {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* 右側のピルの並び */
+.counts {
+  display: flex;
+  gap: 10px;
+}
+
+/* ===== count pill（ガラス＋光の縁） ===== */
+.countPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  /* ガラス感 */
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  user-select: none;
+}
+
+/* ラベルは控えめ */
+.pillLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+/* 数字は“強調”して高級感 */
+.pillValue {
+  min-width: 22px;
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+
+  color: rgba(255, 255, 255, 0.92);
+
+  padding: 3px 8px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* ===== トーン別：未完了 / 完了で色味だけ上品に変える ===== */
+.countPill[data-tone="todo"] {
+  /* うっすら青寄りの縁取り */
+  border-color: rgba(80, 140, 255, 0.22);
+}
+.countPill[data-tone="todo"] .pillValue {
+  background: rgba(80, 140, 255, 0.12);
+  border-color: rgba(80, 140, 255, 0.18);
+}
+
+.countPill[data-tone="done"] {
+  /* うっすら緑寄りの縁取り */
+  border-color: rgba(0, 255, 160, 0.20);
+}
+.countPill[data-tone="done"] .pillValue {
+  background: rgba(0, 255, 160, 0.10);
+  border-color: rgba(0, 255, 160, 0.16);
+}
+
+/* ===== ホバー（PCで触った時だけ“気持ちよく”） ===== */
+.countPill:hover {
+  transform: translateY(-1px);
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.countPill:active {
+  transform: translateY(0px);
+}
+
 
 /* ===== テキスト ===== */
 .task-text {
@@ -294,4 +415,5 @@ export default {
 :deep(.v-btn) {
   box-shadow: none;
 }
+
 </style>
