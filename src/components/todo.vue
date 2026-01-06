@@ -5,13 +5,13 @@
         <!-- <h1 class="title">TODO</h1> -->
         
         <!-- タスク一覧 -->
-        <v-card elevation="2" rounded="lg" class="taskCard">
+        <v-card elevation="2" class="taskCard">
           <h2 class="subTitle">タスク一覧</h2>
           <v-list class="taskScroll">
             <v-list-item 
               v-for="(task, index) in sortedTasks"
               :key="index"
-              :class="{computed: task.status}"
+              :class="{ completed: task.status }"
             >
               <v-list-item-title class="task-text">
                 {{ task.text }}
@@ -26,7 +26,7 @@
                   v-if="!task.status"
                   icon
                   color="blue"
-                  variant="test"
+                  variant="text"
                   @click="completeTask(task)"
                   aria-label="完了"
                 >
@@ -45,10 +45,10 @@
                 </v-btn>
 
                 <v-btn
-                  icom
+                  icon
                   color="red"
                   variant="text"
-                  @click=removeTask(task)
+                  @click="removeTask(task)"
                   aria-label="削除"
                 >
                   <v-icon>mdi-delete</v-icon>
@@ -77,9 +77,9 @@
                     color="primary"
                     rounded
                     class="ml-2"
-                    :desabled="!newTask?.trim()"
+                    :disabled="!newTask?.trim()"
                     @click="addTask"
-                    aria-label="保存"
+                    aria-label="追加"
                   >
                     <v-icon size="20">mdi-send</v-icon>
                   </v-btn>
@@ -94,8 +94,6 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-
 export default {
   name: 'todo',
   data () {
@@ -159,64 +157,141 @@ export default {
 
 
 <style scoped>
+/* ===== 背景：暗めの高級感（ダークガラスが映える） ===== */
 .mainContainer {
-  padding: 8px 12px;
+  padding: 10px 12px;
   height: 100vh;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
+    radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
 }
-.title {
-  text-align: left;
-  font-size: 28px;
-  font-weight: bold;
-  color: #484fb57d;
-  margin: 38px 8px 8px 8px;
-}
-.task-text {
-  font-size: 16px;
-  font-weight: 600;
-}
-.task-date {
-  font-size: 12px;
-  color: #888;
-}
-.flex {
-  display: flex;
-}
-.taskCard {
-  max-height: 70vh;
-  margin: 0 0 20px;
-}
-.taskScroll {
-  max-height: calc(70vh - 40px);
-  overflow-y: auto;
-  padding: 0 0 40px;
-}
-.taskCard::-webkit-scrollbar {
-  width: 6px;
-}
-.taskCard::-webkit-scrollbar-thumb {
-  background: #bbb;
-  border-radius: 4px;
-}
-.subTitle {
-  font-size:16px;
-  text-align: center;
-  padding: 4px 0;
-  background-color: rgba(36, 26, 44, 0.812);
-  color: #bbb;
-}
+
+/* ===== ガラスカード（暗め） ===== */
 .inputArea {
-  padding: 8px;
+  background: rgba(18, 20, 32, 0.55) !important; /* 暗い半透明 */
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
+
+
+  padding: 10px;
   position: fixed;
   bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 32px);
+  width: calc(100% - 24px);
   max-width: 600px;
   z-index: 1000;
 }
-.computed .task-text {
-  text-decoration: line-through;
-  opacity: 0.6;
+
+/* これが一番安定：v-card要素に直撃させる */
+:deep(.v-card.taskCard) {
+  background-color: rgba(18, 20, 32, 0.55) !important;
+  background-image: none !important; /* 念のため */
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
 }
 
+:deep(.taskCard .v-list) {
+  background: transparent !important;
+}
+
+
+
+/* ===== カードサイズ ===== */
+.taskCard {
+  max-height: 70vh;
+  margin: 0 0 16px;
+}
+
+.taskScroll {
+  max-height: calc(70vh - 52px);
+  overflow-y: auto;
+  padding: 6px 0 40px;
+}
+
+/* ===== 見出し：黒ベタじゃなく“ダークガラス帯”に ===== */
+.subTitle {
+  font-size: 14px;
+  text-align: center;
+  padding: 10px 0;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+/* ===== テキスト ===== */
+.task-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.task-date {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* 完了済み */
+.completed .task-text {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+.completed .task-date {
+  opacity: 0.55;
+}
+
+/* ===== スクロールバー（ダーク向け） ===== */
+.taskScroll::-webkit-scrollbar {
+  width: 6px;
+}
+.taskScroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+.taskScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ===== Vuetify内部：TextFieldをダークガラスに馴染ませる ===== */
+:deep(.v-field) {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+:deep(.v-field__input) {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+:deep(.v-label) {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+:deep(.v-field__outline) {
+  opacity: 0.4;
+}
+
+/* ボタン（アイコンボタンが浮きすぎないように） */
+:deep(.v-btn) {
+  box-shadow: none;
+}
 </style>
