@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-container style="max-width: 600px" class="mainContainer">
-        <h1 class="title">TODO</h1>
+        <!-- <h1 class="title">TODO</h1> -->
         
         <!-- タスク一覧 -->
         <v-card elevation="2" rounded="lg" class="taskCard">
@@ -182,11 +182,11 @@ export default {
   display: flex;
 }
 .taskCard {
-  max-height: 60vh;
+  max-height: 80vh;
   margin: 0 0 20px;
 }
 .taskScroll {
-  max-height: calc(60vh - 40px);
+  max-height: calc(80vh - 40px);
   overflow-y: auto;
   padding: 0 0 40px;
 }
