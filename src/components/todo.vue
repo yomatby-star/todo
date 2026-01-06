@@ -182,11 +182,11 @@ export default {
   display: flex;
 }
 .taskCard {
-  max-height: 80vh;
+  max-height: 70vh;
   margin: 0 0 20px;
 }
 .taskScroll {
-  max-height: calc(80vh - 40px);
+  max-height: calc(70vh - 40px);
   overflow-y: auto;
   padding: 0 0 40px;
 }
