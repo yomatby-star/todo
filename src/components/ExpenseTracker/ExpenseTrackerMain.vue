@@ -2,24 +2,51 @@
   <v-container class="container">
     <v-row>
       <v-col>
-        <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
-          <div class="d-flex align-center justify-space-between mb-3">
-            <div class="text-subtitle-1 font-weight-bold" color="blue">
+        <v-card class="pa-4 mt-4 inputArea" elevation="3" rounded="xl">
+          <!-- <div class="d-flex align-center justify-space-between mb-3"> -->
+            <!-- <div class="text-subtitle-1 font-weight-bold">
               <v-icon>mdi-home-variant</v-icon>  
               収支表
-            </div>
-            <v-chip
+            </div> -->
+            <!-- <v-chip
               variant="tonal"
               class="font-weight-bold"
               @click="openMonthPicker"
             >
               {{ monthKey }}
               <v-icon end>mdi-chevron-down</v-icon>
-            </v-chip>
+            </v-chip> -->
 
-          </div>
+          <!-- </div> -->
 
           <!-- サマリー -->
+          <!-- <div class="summaryMain">
+            <div class="summaryBox mainBox">
+              <div class="label labelMain">収支</div>
+              <div class="value valueMain" :class="{ minus: balance < 0 }">
+                {{ formatYen(balance) }}
+              </div>
+            </div>
+          </div> -->
+          <!-- <div class="summaryMain">
+            <div class="labelMain">収支</div>
+            <div class="valueMain" :class="{ minus: balance < 0 }">
+              {{ formatYen(balance) }} 円
+            </div>
+          </div> -->
+          <div class="summaryMainRow d-flex align-center justify-space-between mb-3">
+            <div class="text-subtitle-1 font-weight-bold">
+              <v-icon>mdi-home-variant</v-icon>  
+              収支表
+            </div>
+            <div class="summaryMain">
+              <div class="labelMain">収支</div>
+              <div class="valueMain" :class="{ minus: balance < 0 }">
+                {{ formatYen(balance) }} 円
+              </div>
+            </div>
+          </div>
+
           <div class="summary">
             <div class="summaryBox">
               <div class="label">収入</div>
@@ -29,18 +56,24 @@
               <div class="label">支出</div>
               <div class="value">{{ formatYen(expenseTotal) }}</div>
             </div>
-            <div class="summaryBox">
-              <div class="label">収支</div>
-              <div class="value" :class="{ minus: balance < 0 }">
-                {{ formatYen(balance) }}
-              </div>
-            </div>
           </div>
 
           <v-divider class="my-4" />
 
           <!-- 支出カテゴリ -->
-          <div class="sectionTitle">支出（上位）</div>
+          <div class="d-flex align-center justify-space-between mb-3">
+            <div class="sectionTitle">支出（上位）</div>
+            <v-chip
+              variant="tonal"
+              class="font-weight-bold pa-2"
+              size="40px"
+              @click="openMonthPicker"
+            >
+              {{ monthKey }}
+              <v-icon end>mdi-chevron-down</v-icon>
+            </v-chip>
+          </div>
+
           <div v-if="expenseBreakdown.length === 0" class="empty">
             支出がまだありません
           </div>
@@ -253,19 +286,77 @@ export default {
 
 <style scoped>
 .container {
-  /* height: 100vh; */
   padding: 8px 12px 180px;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
+    radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
+}
+.inputArea {
+  background: rgba(59, 62, 85, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #fff !important;
+}
+.summaryMainRow{
+  display: flex;
+  justify-content: flex-end; /* ←右寄せ */
+  width: 100%;
+  margin: 8px 0;
+}
+
+.summaryMain {
+  display: inline-flex;
+  align-items: center;
+  /* margin: 8px 0; */
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); 
 }
 .summary {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 6px;
 }
+.mainBox {
+  background: #3f51b5;
+  color: #fff;
+  padding: 10px 16px;
+  font-weight: 700;
+}
 .summaryBox {
-  background: rgba(0,0,0,0.03);
+  background: rgb(247, 245, 245);
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 14px;
-  padding: 8px 10px;
+  padding: 4px 10px;
+  color: rgb(26, 26, 26);
+}
+.labelMain {
+  position: absolute;
+  right: 120px;
+  padding: 10px 33px;
+  border-radius: 9999px 0 0 9999px;
+  background: rgba(80, 110, 200, 0.35);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: #fff;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.valueMain {
+  padding: 10px 18px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  color: #111;
+  font-weight: 900;
+  white-space: nowrap;
+  min-width: 140px;
+  text-align: right;
+  z-index: 2000;
+}
+.valueMain.minus {
+  color: #f30303;
 }
 .label {
   font-size: 12px;
@@ -276,10 +367,6 @@ export default {
   font-weight: 800;
   margin-top: 4px;
 }
-.value.minus {
-  color: #f30303;
-}
-
 .sectionTitle {
   font-weight: 800;
   margin-bottom: 10px;
@@ -288,13 +375,10 @@ export default {
   opacity: 0.7;
   padding: 8px 0 2px;
 }
-
 .barList {
   display: grid;
   gap: 12px;
 }
-.barRow {}
-
 .barHead {
   display: flex;
   justify-content: space-between;
@@ -313,7 +397,6 @@ export default {
   opacity: 0.7;
   margin-left: 6px;
 }
-
 .barTrack {
   margin-top: 6px;
   height: 10px;
@@ -325,8 +408,6 @@ export default {
   height: 100%;
   border-radius: 999px;
 }
-
-/* 色分け（支出=赤系、収入=青系） */
 .barFill.expense { background: #a45ada; }
 .barFill.income  { background: #3c72ce; }
 </style>
