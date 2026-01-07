@@ -32,7 +32,7 @@
 
           <!-- 支出カテゴリ -->
           <div class="d-flex align-center justify-space-between mb-3">
-            <div class="sectionTitle">支出（上位）</div>
+            <div class="sectionTitle">{{ year }}年{{ month }}月の明細</div>
             <v-chip
               variant="tonal"
               class="font-weight-bold pa-2"
@@ -44,50 +44,51 @@
             </v-chip>
           </div>
 
-          <div v-if="expenseBreakdown.length === 0" class="empty">
-            支出がまだありません
-          </div>
+          <div class="detailScroll">
+            <div v-if="expenseBreakdown.length === 0" class="empty">
+              支出がまだありません
+            </div>
 
-          <div v-else class="barList">
-            <div v-for="row in expenseBreakdown" :key="'exp-' + row.category" class="barRow">
-              <div class="barHead">
-                <div class="barLabel">{{ row.category }}</div>
-                <div class="barValue">
-                  {{ formatYen(row.amount) }} 円
-                  <span class="pct">（{{ row.pct }}%）</span>
+            <div v-else class="barList">
+              <div v-for="row in expenseBreakdown" :key="'exp-' + row.category" class="barRow">
+                <div class="barHead">
+                  <div class="barLabel">{{ row.category }}</div>
+                  <div class="barValue">
+                    {{ formatYen(row.amount) }} 円
+                    <span class="pct">（{{ row.pct }}%）</span>
+                  </div>
+                </div>
+
+                <div class="barTrack">
+                  <div class="barFill expense" :style="{ width: row.pct + '%' }"></div>
                 </div>
               </div>
+            </div>
 
-              <div class="barTrack">
-                <div class="barFill expense" :style="{ width: row.pct + '%' }"></div>
+            <v-divider class="my-4" />
+
+            <!-- 収入カテゴリ -->
+            <div class="sectionTitle d-flex align-center justify-space-between mb-3">収入（上位）</div>
+            <div v-if="incomeBreakdown.length === 0" class="empty">
+              収入がまだありません
+            </div>
+
+            <div v-else class="barList">
+              <div v-for="row in incomeBreakdown" :key="'inc-' + row.category" class="barRow">
+                <div class="barHead">
+                  <div class="barLabel">{{ row.category }}</div>
+                  <div class="barValue">
+                    {{ formatYen(row.amount) }} 円
+                    <span class="pct">（{{ row.pct }}%）</span>
+                  </div>
+                </div>
+
+                <div class="barTrack">
+                  <div class="barFill income" :style="{ width: row.pct + '%' }"></div>
+                </div>
               </div>
             </div>
           </div>
-
-          <v-divider class="my-4" />
-
-          <!-- 収入カテゴリ -->
-          <div class="sectionTitle">収入（上位）</div>
-          <div v-if="incomeBreakdown.length === 0" class="empty">
-            収入がまだありません
-          </div>
-
-          <div v-else class="barList">
-            <div v-for="row in incomeBreakdown" :key="'inc-' + row.category" class="barRow">
-              <div class="barHead">
-                <div class="barLabel">{{ row.category }}</div>
-                <div class="barValue">
-                  {{ formatYen(row.amount) }} 円
-                  <span class="pct">（{{ row.pct }}%）</span>
-                </div>
-              </div>
-
-              <div class="barTrack">
-                <div class="barFill income" :style="{ width: row.pct + '%' }"></div>
-              </div>
-            </div>
-          </div>
-
         </v-card>
       </v-col>
     </v-row>
@@ -257,15 +258,19 @@ export default {
 <style scoped>
 .container {
   padding: 8px 12px 180px;
-  /* height: 100vh; */
+  height: 100vh;
   background:
     radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
     radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
     linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
 }
 .inputArea {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
   background: rgba(59, 62, 85, 0.55) !important;
   border: 1px solid rgba(255, 255, 255, 0.10);
+
   color: #fff !important;
 }
 .summaryMainRow{
@@ -274,7 +279,6 @@ export default {
   width: 100%;
   margin:0 0 8px 0;
 }
-
 .summaryMain {
   display: inline-flex;
   align-items: center;
@@ -340,10 +344,11 @@ export default {
   font-size: 18px;
   font-weight: 800;
   margin-top: 4px;
+  text-align: right;
 }
 .sectionTitle {
   font-weight: 800;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 .empty {
   opacity: 0.7;
@@ -352,6 +357,12 @@ export default {
 .barList {
   display: grid;
   gap: 12px;
+}
+.detailScroll {
+  overflow-y: auto;
+  max-height: calc(80vh - 160px); /* 上のヘッダ/サマリー分を引く（調整してOK） */
+  padding-right: 6px;
+  -webkit-overflow-scrolling: touch;
 }
 .barHead {
   display: flex;
