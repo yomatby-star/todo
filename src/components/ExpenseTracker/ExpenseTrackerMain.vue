@@ -50,11 +50,11 @@
           <div class="summary">
             <div class="summaryBox">
               <div class="label">収入</div>
-              <div class="value">{{ formatYen(incomeTotal) }}</div>
+              <div class="value">{{ formatYen(incomeTotal) }} 円</div>
             </div>
             <div class="summaryBox">
               <div class="label">支出</div>
-              <div class="value">{{ formatYen(expenseTotal) }}</div>
+              <div class="value">{{ formatYen(expenseTotal) }} 円</div>
             </div>
           </div>
 
@@ -287,7 +287,7 @@ export default {
 <style scoped>
 .container {
   padding: 8px 12px 180px;
-  height: 100vh;
+  /* height: 100vh; */
   background:
     radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
     radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
