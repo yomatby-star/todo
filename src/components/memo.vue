@@ -34,7 +34,7 @@
                 <v-btn
                   icon
                   variant="text"
-                  @click.stop="removeMemo(m.id)"
+                  @click.stop="openDeleteDialog(m.id)"
                 >
                   <v-icon color="red">mdi-delete</v-icon>
                 </v-btn>
@@ -72,7 +72,7 @@
             v-if="currentMemo"
             icon
             variant="text"
-            @click="removeMemo(currentMemo.id); closeEditor()"
+            @click="openDeleteDialog(currentMemo.id, true)"
             aria-label="削除"
           >
             <v-icon color="red">mdi-delete</v-icon>
@@ -112,6 +112,19 @@
     >
       <v-icon color="white">mdi-plus</v-icon>
     </v-btn>
+
+    <!-- 削除ダイアログ -->
+    <v-dialog v-model="deleteDialog" max-width="420">
+      <v-card elevation="4" rounded="lg" class="confirmCard">
+        <v-card-text>
+          {{ deletingMemo?.title || "このメモ"}} を削除します。
+        </v-card-text>
+        <v-card-actions>
+          <v-btn variant="text" @click="cancelDelete">キャンセル</v-btn>
+          <v-btn color="red" variant="flat" @click="confirmDelete">削除</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -123,14 +136,15 @@ export default {
       memos: [],
       selectedId: null,
       editorOpen: false,
+      deleteDialog: false,
+      deletingId: null,
+      closeEditorOnDelete: false
     }
   },
-
   mounted() {
     const saved = localStorage.getItem("memos_v1")
     this.memos = saved ? JSON.parse(saved) : []
   },
-
   watch: {
     memos: {
       deep: true,
@@ -139,13 +153,14 @@ export default {
       }
     }
   },
-
   computed: {
     currentMemo() {
       return this.memos.find((m) => m.id === this.selectedId) || null
+    },
+    deletingMemo() {
+      return this.memos.find((m) => m.id === this.deletingId) || null
     }
   },
-
   methods: {
     makeId() {
       if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
@@ -153,7 +168,6 @@ export default {
       }
       return `${Date.now()}-${Math.random().toString(16).slice(2)}`
     },
-
     formatDate(ts) {
       if (!ts) return ""
       const d = new Date(ts)
@@ -164,7 +178,6 @@ export default {
       const mi = String(d.getMinutes()).padStart(2, "0")
       return `${yyyy}/${mm}/${dd} ${hh}:${mi}`
     },
-
     // ＋：新規作成して即編集を開く
     createMemoAndOpen() {
       const date = Date.now()
@@ -179,35 +192,48 @@ export default {
       this.selectedId = id
       this.editorOpen = true
     },
-
     // 一覧クリック：選択して編集を開く
     openMemo(id) {
       this.selectedId = id
       this.editorOpen = true
     },
-
     closeEditor() {
       this.editorOpen = false
     },
-
+    openDeleteDialog(id, shouldCloseEditor = false) {
+      this.deletingId = id
+      this.closeEditorOnDelete = shouldCloseEditor
+      this.deleteDialog = true
+    },
+    cancelDelete() {
+      this.deleteDialog = false
+      this.deletingId = null
+      this.closeEditorOnDelete = false
+    },
     removeMemo(targetId) {
       this.memos = this.memos.filter((m) => m.id !== targetId)
-
       // 削除対象が今開いてるメモなら選択も解除
       if (this.selectedId === targetId) {
         this.selectedId = null
       }
     },
+    confirmDelete() {
+      if (!this.deletingId) return
+      const targetId = this.deletingId
+      this.removeMemo(targetId)
 
+      if (this.closeEditorOnDelete) {
+        this.closeEditor()
+      }
+      this.deleteDialog = false
+      this.deletingId = null
+    },
     touchCurrentMemo() {
       if (!this.currentMemo) return
-
       const date = Date.now()
       this.currentMemo.updatedAt = date
-
       const firstLine = (this.currentMemo.body || "").split("\n")[0].trim()
       this.currentMemo.title = firstLine || "新規メモ"
-
       this.memos.sort((a, b) => b.updatedAt - a.updatedAt)
     }
   }
@@ -248,4 +274,12 @@ export default {
     radial-gradient(900px 500px at 85% 25%, rgba(190, 196, 198, 0.18), transparent 55%),
     linear-gradient(180deg, rgba(230, 230, 235, 0.98), rgba(176, 176, 179, 0.98));
 }
-</style>>
+.confirmCard {
+  background: rgba(18, 20, 32, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.90);
+}
+</style>
