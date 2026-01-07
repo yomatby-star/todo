@@ -265,7 +265,7 @@ export default {
     linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
 }
 .inputArea {
-  height: 70vh;
+  max-height: 70vh;
   display: flex;
   flex-direction: column;
   background: rgba(59, 62, 85, 0.55) !important;
