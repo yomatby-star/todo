@@ -2,39 +2,9 @@
   <v-container class="container">
     <v-row>
       <v-col>
-        <v-card class="pa-4 mt-4 inputArea" elevation="3" rounded="xl">
-          <!-- <div class="d-flex align-center justify-space-between mb-3"> -->
-            <!-- <div class="text-subtitle-1 font-weight-bold">
-              <v-icon>mdi-home-variant</v-icon>  
-              収支表
-            </div> -->
-            <!-- <v-chip
-              variant="tonal"
-              class="font-weight-bold"
-              @click="openMonthPicker"
-            >
-              {{ monthKey }}
-              <v-icon end>mdi-chevron-down</v-icon>
-            </v-chip> -->
-
-          <!-- </div> -->
-
-          <!-- サマリー -->
-          <!-- <div class="summaryMain">
-            <div class="summaryBox mainBox">
-              <div class="label labelMain">収支</div>
-              <div class="value valueMain" :class="{ minus: balance < 0 }">
-                {{ formatYen(balance) }}
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="summaryMain">
-            <div class="labelMain">収支</div>
-            <div class="valueMain" :class="{ minus: balance < 0 }">
-              {{ formatYen(balance) }} 円
-            </div>
-          </div> -->
-          <div class="summaryMainRow d-flex align-center justify-space-between mb-3">
+        <v-card class="pa-4 inputArea" elevation="3" rounded="xl">
+          
+          <div class="summaryMainRow d-flex align-center justify-space-between">
             <div class="text-subtitle-1 font-weight-bold">
               <v-icon>mdi-home-variant</v-icon>  
               収支表
@@ -302,7 +272,7 @@ export default {
   display: flex;
   justify-content: flex-end; /* ←右寄せ */
   width: 100%;
-  margin: 8px 0;
+  margin:0 0 8px 0;
 }
 
 .summaryMain {
@@ -336,7 +306,7 @@ export default {
 .labelMain {
   position: absolute;
   right: 120px;
-  padding: 10px 33px;
+  padding: 12px 44px;
   border-radius: 9999px 0 0 9999px;
   background: rgba(80, 110, 200, 0.35);
   border: 1px solid rgba(255,255,255,0.10);
@@ -345,6 +315,9 @@ export default {
   white-space: nowrap;
 }
 .valueMain {
+  font-size: 18px;
+  /* font-weight: 800; */
+  /* margin-top: 4px; */
   padding: 10px 18px;
   border-radius: 9999px;
   background: #fff;
