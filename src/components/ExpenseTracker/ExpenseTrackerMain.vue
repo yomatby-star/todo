@@ -4,7 +4,10 @@
       <v-col>
         <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
           <div class="d-flex align-center justify-space-between mb-3">
-            <div class="text-subtitle-1 font-weight-bold">収支表</div>
+            <div class="text-subtitle-1 font-weight-bold" color="blue">
+              <v-icon>mdi-home-variant</v-icon>  
+              収支表
+            </div>
             <v-chip
               variant="tonal"
               class="font-weight-bold"
