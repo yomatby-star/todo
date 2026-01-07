@@ -287,6 +287,7 @@ export default {
 <style scoped>
 .container {
   padding: 8px 12px 180px;
+  height: 100vh;
   background:
     radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
     radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
