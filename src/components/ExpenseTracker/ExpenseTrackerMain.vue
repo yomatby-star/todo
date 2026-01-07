@@ -359,10 +359,31 @@ export default {
   gap: 12px;
 }
 .detailScroll {
+  position: relative;
   overflow-y: auto;
-  max-height: calc(80vh - 160px); /* 上のヘッダ/サマリー分を引く（調整してOK） */
+  max-height: calc(80vh - 160px);
   padding-right: 6px;
   -webkit-overflow-scrolling: touch;
+}
+.detailScroll::before{
+  content:"";
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 18px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(59,62,85,0.75), rgba(59,62,85,0));
+  z-index: 5;
+}
+.detailScroll::after{
+  content:"";
+  position: sticky;
+  bottom: 0;
+  display: block;
+  height: 22px;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(59,62,85,0.75), rgba(59,62,85,0));
+  z-index: 5;
 }
 .barHead {
   display: flex;
