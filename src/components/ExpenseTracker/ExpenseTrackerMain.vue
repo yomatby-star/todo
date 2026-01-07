@@ -417,23 +417,23 @@ export default {
 /* .barFill.expense { background: #a45ada; }
 .barFill.income  { background: #3c72ce; } */
 
-/* .barFill.expense {
+.barFill.expense {
   background: linear-gradient(90deg, #ff4fd8, #a855f7, #6366f1);
   box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
 }
 .barFill.income {
   background: linear-gradient(90deg, #22d3ee, #3b82f6, #6366f1);
   box-shadow: 0 0 14px rgba(34, 211, 238, 0.30);
-} */
+}
 
-.barFill.expense {
+/* .barFill.expense {
   background: linear-gradient(90deg, #f59e0b, #fb7185, #ef4444);
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.28);
 }
 .barFill.income {
   background: linear-gradient(90deg, #34d399, #10b981, #22c55e);
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.22);
-}
+} */
 
 /* .barFill.expense {
   background: linear-gradient(90deg, #fda4af, #fb7185);
