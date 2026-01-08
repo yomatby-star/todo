@@ -304,7 +304,7 @@ export default {
   background: rgb(247, 245, 245);
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 14px;
-  padding: 4px 10px;
+  padding: 2px 10px;
   color: rgb(26, 26, 26);
 }
 .labelMain {

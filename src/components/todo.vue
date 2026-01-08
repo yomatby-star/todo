@@ -11,7 +11,7 @@
             <div class="counts">
               <span class="countPill">
                 <span class="pillLabel">未完了</span>
-                <span class="pillValue">{{ incomplateCount }}</span>
+                <span class="pillValue" style="color:fuchsia">{{ incomplateCount }}</span>
               </span>
               <span class="countPill">
                 <span class="pillLabel">完了</span>
