@@ -26,6 +26,13 @@ export default {
         p.startsWith("/expenseListView") 
       )
     },
+    isExpenseHomeArea () {
+      const p = this.$route.path
+      return (
+        p.startsWith("/incomForm") ||
+        p.startsWith("/expenseListView") 
+      )
+    },
     isHomeActive () {
       return this.$route.path.startsWith("/ExpenseTracker")
     },
@@ -87,6 +94,7 @@ export default {
       </v-btn>
 
       <v-btn
+          v-if="isExpenseHomeArea"
           rounded="xl"
           class="sheetBtn sheetBtnHome homeAreaBtn"
           :class="{ activeSheetBtn: isHomeActive }"
