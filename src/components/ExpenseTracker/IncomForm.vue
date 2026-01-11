@@ -102,11 +102,19 @@
               </v-list-item-title>
 
               <v-list-item-subtitle>
-                登録 {{ formatDate(it.createdAt) }}
+                登録日 {{ formatDate(it.createdAt) }}
               </v-list-item-subtitle>
 
-              <template #append>
+              <!-- <template #append>
                 <v-btn icon="mdi-delete" variant="text" color="red" @click.stop="removeIncome(it.id)"/>
+              </template> -->
+              <template #append>
+                <v-btn
+                  icon="mdi-delete"
+                  variant="text"
+                  color="red"
+                  @click.stop="openDeleteDialog(it.id)"
+                />
               </template>
             </v-list-item>
           </v-list>
@@ -142,6 +150,22 @@
         </div>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="deleteDialogOpen" max-width="420">
+      <v-card class="pa-4" rounded="xl">
+        <v-card-title class="text-h6 font-weight-bold">削除確認</v-card-title>
+
+        <v-card-text>
+          この収入を削除しますか？<br />
+          （削除すると元に戻せません）
+        </v-card-text>
+
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="closeDeleteDialog">キャンセル</v-btn>
+          <v-btn color="red" variant="flat" @click="confirmDelete">削除</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -156,6 +180,8 @@ export default {
     return {
       year,
       month,
+      deleteDialogOpen: false,
+      deleteTargetId: null,
       monthPickerOpen: false,
       form: {
         amount: null,
@@ -238,12 +264,28 @@ export default {
       setTimeout(() => (this.message = ""), 1200)
     },
     // 削除アイコン
-    removeIncome (id) {
-      this.incomes = this.incomes.filter((x) => x.id !== id)
-    },
+    // removeIncome (id) {
+    //   this.incomes = this.incomes.filter((x) => x.id !== id)
+    // },
     openMonthPicker() {
       this.monthPickerOpen = true
-    }
+    },
+    openDeleteDialog(id) {
+      this.deleteTargetId = id
+      this.deleteDialogOpen = true
+    },
+    closeDeleteDialog() {
+      this.deleteDialogOpen = false
+      this.deleteTargetId = null
+    },
+    confirmDelete() {
+      if (!this.deleteTargetId) return
+      this.incomes = this.incomes.filter(x => x.id !== this.deleteTargetId)
+      this.closeDeleteDialog()
+
+      // this.message = "削除しました"
+      // setTimeout(() => (this.message = ""), 1200)
+    },
   }
 }
 </script>
