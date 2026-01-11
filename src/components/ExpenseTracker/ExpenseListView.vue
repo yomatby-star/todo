@@ -2,49 +2,8 @@
   <v-container class="container">
     <v-row justify="center">
       <v-col cols="12" md="6">
-
-        <!-- 明細リスト -->
-        <!-- 支出合計が見れる場所※カレンダーで日付変更して確認可能 -->
-        <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
-          <div>
-            <!-- 今月合計 -->
-            <v-card class="pa-4" variant="tonal" rounded="xl">
-              <div class="flex">
-                <div class="text-subtitle-1 font-weight-bold">{{ year }}年 {{ month }}月分</div>
-                <div class="text-h6 font-weight-bold">{{ formatYen(monthTotal) }} 円</div>
-              </div>
-            </v-card>
-          </div>
-
-          <v-divider class="my-3"/>
-
-          <!-- 登録内容表示 -->
-          <v-list v-if="monthExpenses.length">
-            <v-list-item v-for="m in monthExpenses" :key="m.id">
-              <v-list-item-title class="flex">
-                <span>{{ m.category }} <span> - {{ m.note }}</span></span>
-                <span>{{ formatYen(m.amount) }}円</span>
-              </v-list-item-title>
-
-              <v-list-item-subtitle>
-                {{ formatDate(m.createdAt) }}
-              </v-list-item-subtitle>
-
-              <template #append>
-                <v-btn icon="mdi-delete" color="red" variant="text" @click="removeOnExpense(m.id)"></v-btn>
-              </template>
-            </v-list-item>
-          </v-list>
-
-          <div v-else class="text-center text-medium-emphasis">
-            支出が登録されていません
-          </div>
-        </v-card>
-
-
-
-        <!-- 支出オプションボタン一覧を表示（） -->
-        <v-card class="pa-4 mt-4" elevation="3" rounded="xl">
+         <!-- 支出オプションボタン一覧を表示（） -->
+        <v-card class="inputCard" elevation="3" rounded="xl">
           <div class="flex">
             <div class="text-subtitle-1 font-weight-bold">支出登録</div>
             <!-- 年月チップ（押すと月変更UI表示） -->
@@ -93,8 +52,46 @@
             保存
             </v-btn>
 
-            <div v-if="message" class="text-center text-success mt-3">
+            <div v-if="message" class="messageText">
             {{ message }}
+          </div>
+        </v-card>
+
+        <!-- 明細リスト -->
+        <!-- 支出合計が見れる場所※カレンダーで日付変更して確認可能 -->
+        <v-card class="inputCard" elevation="3" rounded="xl">
+          <div>
+            <!-- 今月合計 -->
+            <v-card class="pa-4" variant="tonal" rounded="xl">
+              <div class="flex">
+                <div class="text-subtitle-1 font-weight-bold">{{ year }}年 {{ month }}月分</div>
+                <div class="text-h6 font-weight-bold">{{ formatYen(monthTotal) }} 円</div>
+              </div>
+            </v-card>
+          </div>
+
+          <v-divider class="my-3"/>
+
+          <!-- 登録内容表示 -->
+          <v-list v-if="monthExpenses.length" class="inputCar inputListArea">
+            <v-list-item v-for="m in monthExpenses" :key="m.id">
+              <v-list-item-title class="flex">
+                <span>{{ m.category }} <span> - {{ m.note }}</span></span>
+                <span>{{ formatYen(m.amount) }}円</span>
+              </v-list-item-title>
+
+              <v-list-item-subtitle>
+                {{ formatDate(m.createdAt) }}
+              </v-list-item-subtitle>
+
+              <template #append>
+                <v-btn icon="mdi-delete" color="red" variant="text" @click="removeOnExpense(m.id)"></v-btn>
+              </template>
+            </v-list-item>
+          </v-list>
+
+          <div v-else class="text-center text-medium-emphasis">
+            支出が登録されていません
           </div>
         </v-card>
       </v-col>
@@ -233,10 +230,31 @@ export default {
 <style scoped>
 .container {
   padding: 8px 12px 180px;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
+    radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
 }
 .flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+.inputCard {
+  padding: 16px;
+  margin-bottom: 12px;
+  background: rgba(116, 121, 140, 0.674);
+  color: aliceblue;
+}
+.inputListArea {
+  border-radius: 16px;
+  background: rgba(106, 126, 206, 0.597);
+  color: aliceblue;
+}
+.messageText {
+  color: rgb(171, 155, 186);
+  text-align: center;
+  margin: 8px;
+}
+
 </style>

@@ -85,17 +85,10 @@ export default {
       >
         <v-icon size="28" color="white">mdi-plus</v-icon>
       </v-btn>
-    </div>
 
-    <!-- ダイアログ -->
-    <v-bottom-sheet v-model="addSheet" inset>
-      <v-card class="sheetCard" rounded="xl">
-        <div class="sheetHandle" />
-        <v-btn
-          block
-          size="large"
+      <v-btn
           rounded="xl"
-          class="sheetBtn sheetBtnHome"
+          class="sheetBtn sheetBtnHome homeAreaBtn"
           :class="{ activeSheetBtn: isHomeActive }"
           @click="goAddHome"
         >
@@ -103,6 +96,13 @@ export default {
           <!-- <v-icon start>mdi-view-dashboard-outline</v-icon> -->
           <!-- ホーム -->
         </v-btn>
+    </div>
+
+    <!-- ダイアログ -->
+    <v-bottom-sheet v-model="addSheet" inset>
+      <v-card class="sheetCard" rounded="xl">
+        <div class="sheetHandle" />
+        
 
         <v-btn
           block
@@ -263,6 +263,9 @@ export default {
   z-index: 1100;
   width: 60px;
   height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 .expenseFab {
   position: absolute;
@@ -294,6 +297,14 @@ export default {
   transform: scaleX(0.92);
   transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
   filter: saturate(0.95);
+}
+.homeAreaBtn {
+  position: fixed;
+  right: -20px;
+  bottom: 150px;
+  max-width: 20px;
+  max-height: 30px;
+  margin: 0 26px 0 0;
 }
 .sheetBtn.activeSheetBtn{
   transform: scaleX(1);
