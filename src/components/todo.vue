@@ -17,10 +17,9 @@
                 <span class="pillLabel">完了</span>
                 <span class="pillValue">{{ completedCount }}</span>
               </span>
-            
             </div>
           </div>
-          <v-list class="taskScroll">
+          <v-list class="taskScroll" @scroll.passive="onTaskScroll">
             <v-list-item 
               v-for="(task, index) in sortedTasks"
               :key="index"
@@ -66,10 +65,10 @@
                 >
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
-                
               </template>
             </v-list-item>
           </v-list>
+          <v-btn v-if="tasks.length !== 0" @click="allDeleteDialogOpen()" class="rightFixd allDeleteButton" :class="{ hidden: isScrolling }">全削除</v-btn>
         </v-card>
 
         <!-- 入力カード -->
@@ -110,7 +109,18 @@
             </v-card-text>
             <v-card-actions>
               <v-btn variant="text" @click="cancelDelete">キャンセル</v-btn>
-              <v-btn color="red" variant="flat" @click="confirmDelete">削除</v-btn>
+              <v-btn color="red" variant="flat" @click="confirmDelete">はい</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <!-- 全削除 -->
+        <v-dialog v-model="allDeleteDialog">
+          <v-card elevation="4" rounded="xg" class="confirmCard">
+            <v-card-text>全部削除しますか？</v-card-text>
+            <v-card-actions>
+              <v-btn variant="text" @click="allcancelDelete">キャンセル</v-btn>
+              <v-btn color="red" variant="flat" @click="allDeleting">はい</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -128,6 +138,9 @@ export default {
       tasks: [],
       deleteDialog: false,
       deletingTask: null,
+      allDeleteDialog: false,
+      isScrolling: false,
+      scrollTimer: null
     }
   },
   mounted () {
@@ -191,15 +204,30 @@ export default {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
     },
     openDeleteDialog (task) {
-      // console.log("ダイアログ")
       this.deletingTask = task
-      // console.log(this.deletingTask)
       this.deleteDialog = true
-      // console.log(this.deleteDialog)
     },
     cancelDelete () {
       this.deletingTask = null
       this.deleteDialog = false
+    },
+    allDeleteDialogOpen () {
+      this.allDeleteDialog = true
+    },
+    allcancelDelete () {
+      this.allDeleteDialog = false
+    },
+    allDeleting () {
+      this.tasks = []
+      localStorage.removeItem('tasks')
+      this.allDeleteDialog = false
+    },
+    onTaskScroll () {
+      this.isScrolling = true
+      if(this.scrollTimer) clearTimeout(this.scrollTimer)
+      this.scrollTimer = setTimeout(()=> {
+        this.isScrolling = false
+      }, 180)
     }
   }
 }
@@ -260,7 +288,7 @@ export default {
 .taskScroll {
   max-height: calc(65vh - 52px);
   overflow-y: auto;
-  padding: 6px 0 40px;
+  padding: 6px 0 60px;
 }
 
 .subHeader {
@@ -447,5 +475,32 @@ export default {
   color: rgba(255, 255, 255, 0.90);
 }
 
+.allDeleteButton {
+  background: rgba(18, 20, 32, 0.35) !important;
+  /* backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); */
+  backdrop-filter: blur(14px) saturate(140%) brightness(110%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%) brightness(110%);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: aliceblue !important;
+  min-width: 40px;   /* ←ここ大事 */
+  height: 40px;
+  border-radius: 12px;
+  padding: 4px;
+
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.allDeleteButton.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+}
+
+.rightFixd {
+  position: fixed;
+  right: 4px;
+  bottom: 0;
+}
 
 </style>

@@ -85,7 +85,7 @@
               </v-list-item-subtitle>
 
               <template #append>
-                <v-btn icon="mdi-delete" color="red" variant="text" @click="removeOnExpense(m.id)"></v-btn>
+                <v-btn icon="mdi-delete" color="red" variant="text" @click="openDeleteDialog(m.id)"></v-btn>
               </template>
             </v-list-item>
           </v-list>
@@ -121,6 +121,23 @@
         </div>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="deleteDialogOpen" max-width="420">
+      <v-card class="pa-4" rounded="xl">
+        <v-card-title class="font-weight-bold">
+          削除確認
+        </v-card-title>
+        <v-card-text>
+          この支出を削除しますか？<br/>
+          （削除すると元に戻せません）
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="cancelDelete">キャンセル</v-btn>
+          <v-btn color="red" variant="flat" @click="confirmDelete">削除</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -135,6 +152,8 @@ export default {
       year,
       month,
       monthPickerOpen: false,
+      deleteDialogOpen: false,
+      deleteDialogId: null,
       form: {
         amount: null,
         category: "家賃",
@@ -219,9 +238,28 @@ export default {
       this.message = "保存完了"
       setTimeout(() => (this.message = ""), 1200)
     },
-    removeOnExpense(id) {
-      this.onExpense = this.onExpense.filter((x) => x.id !== id)
+    // removeOnExpense(id) {
+    //   this.onExpense = this.onExpense.filter((x) => x.id !== id)
+    // },
+    openDeleteDialog (id) {
+      this.deleteDialogId = id
+      this.deleteDialogOpen = true
+    },
+    cancelDelete () {
+      this.deleteDialogId = null
+      this.deleteDialogOpen = false
+    },
+    closeDeleteDialog () {
+      this.deleteDialogOpen = false
+      this.deleteDialogId = null
+    },
+    confirmDelete () {
+      if (!this.deleteDialogId) return
+      this.onExpense = this.onExpense.filter(x => x.id !== this.deleteDialogId)
+      this.closeDeleteDialog()
     }
+
+
   },
 }
 </script>

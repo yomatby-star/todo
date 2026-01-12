@@ -92,6 +92,7 @@
         </v-card>
       </v-col>
     </v-row>
+
     <!-- 年月選択ダイアログ -->
     <v-dialog v-model="monthPickerOpen" max-width="420">
       <v-card class="pa-4" rounded="xl">
@@ -121,7 +122,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </v-container>
 </template>
 
