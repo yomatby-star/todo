@@ -127,11 +127,11 @@
 
 <script>
 import Mixin from "../../mixin.js/mixin"
+import localStorageSync from "../../mixin.js/localStorageSync"
 
 export default {
   name: "ExpenseTrackerMain",
-  mixins: [Mixin],
-
+  mixins: [Mixin, localStorageSync],
   data() {
     const { year, month } = this.getCurrentYearMonth()
     return {
@@ -186,18 +186,9 @@ export default {
     },
   },
 
-  watch: {
-    monthKey() {
-      this.loadLocal()
-    },
-  },
-
   mounted() {
-    this.loadLocal()
-    window.addEventListener("storage", this.loadLocal)
-  },
-  beforeUnmount() {
-    window.removeEventListener("storage", this.loadLocal)
+    this.startLocalStorageSync("income_v1", "incomes", [])
+    this.startLocalStorageSync("onexpense_v1", "expenses", [])
   },
 
   methods: {
@@ -213,13 +204,6 @@ export default {
       this.month = this.tempMonth
       this.monthPickerOpen = false
       // monthKeyが変わるのでwatch(monthKey)が動いてloadLocal()される :contentReference[oaicite:1]{index=1}
-    },
-    loadLocal() {
-      const incRaw = localStorage.getItem("income_v1")
-      this.incomes = incRaw ? JSON.parse(incRaw) : []
-
-      const expRaw = localStorage.getItem("onexpense_v1")
-      this.expenses = expRaw ? JSON.parse(expRaw) : []
     },
 
     makeBreakdown(list, total, limit = 8) {
@@ -320,8 +304,6 @@ export default {
 }
 .valueMain {
   font-size: 18px;
-  /* font-weight: 800; */
-  /* margin-top: 4px; */
   padding: 10px 18px;
   border-radius: 9999px;
   background: #fff;

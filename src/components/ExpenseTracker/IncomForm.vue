@@ -172,9 +172,10 @@
 
 <script>
 import Mixin from "../../mixin.js/mixin"
+import localStorageSync from "../../mixin.js/localStorageSync"
 export default {
   name: "IncomeForm",
-  mixins: [Mixin],
+  mixins: [Mixin, localStorageSync],
   data () {
     const { year, month } = this.getCurrentYearMonth()
     return {
@@ -194,16 +195,7 @@ export default {
     }
   },
   mounted() {
-    const saved = localStorage.getItem("income_v1")
-    this.incomes = saved ? JSON.parse(saved) : []
-  },
-  watch: {
-    incomes: {
-      deep: true,
-      handler (val) {
-        localStorage.setItem("income_v1", JSON.stringify(val))
-      }
-    }
+    this.startLocalStorageSync("income_v1", "incomes", [])
   },
   computed: {
     // 年

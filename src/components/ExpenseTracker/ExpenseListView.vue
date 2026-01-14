@@ -143,9 +143,10 @@
 
 <script>
 import Mixin from '../../mixin.js/mixin'
+import localStorageSync from '../../mixin.js/localStorageSync'
 export default {
   name: "expenseListView",
-  mixins: [Mixin],
+  mixins: [Mixin, localStorageSync],
   data () {
     const { year, month } = this.getCurrentYearMonth()
     return {
@@ -165,16 +166,7 @@ export default {
     }
   },
   mounted() {
-    const saved = localStorage.getItem("onexpense_v1")
-    this.onExpense = saved ? JSON.parse(saved) : []
-  },
-  watch: {
-    onExpense: {
-      deep: true,
-      handler(val) {
-        localStorage.setItem("onexpense_v1", JSON.stringify(val))
-      }
-    }
+    this.startLocalStorageSync("onexpense_v1", "onExpense", [])
   },
   computed: {
     // 年
