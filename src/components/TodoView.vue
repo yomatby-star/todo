@@ -9,7 +9,7 @@
             <div class="counts">
               <span class="countPill">
                 <span class="pillLabel">未完了</span>
-                <span class="pillValue" style="color:fuchsia">{{ incomplateCount }}</span>
+                <span class="pillValue" style="color:fuchsia">{{ incompleteCount }}</span>
               </span>
               <span class="countPill">
                 <span class="pillLabel">完了</span>
@@ -20,16 +20,16 @@
 
           <v-list class="taskScroll" @scroll.passive="onTaskScroll">
             <v-list-item 
-              v-for="(task, index) in sortedTasks"
-              :key="index"
+              v-for="task in sortedTasks"
+              :key="task.id"
               :class="{ completed: task.status }"
             >
               <v-list-item-title class="task-text">
                 {{ task.text }}
               </v-list-item-title>
               <v-list-item-subtitle class="task-date">
-                {{ task.created_at }}
-                <span v-if="task.status && task.completed_at"> / 完了: {{ task.completed_at }}</span>
+                {{ formatDate(task.created_at) }}
+                <span v-if="task.status && task.completed_at"> / 完了: {{ formatDate(task.completed_at) }}</span>
               </v-list-item-subtitle>
 
               <template #append>
@@ -132,11 +132,12 @@
 </template>
 
 <script>
+import mixin from "../mixin.js/mixin"
 import localStorageSync from "../mixin.js/localStorageSync"
 
 export default {
-  name: 'todo',
-  mixins: [localStorageSync],
+  name: 'TodoView',
+  mixins: [mixin, localStorageSync],
   data () {
     return {
       newTask: '',
@@ -151,45 +152,48 @@ export default {
   mounted () {
     this.startLocalStorageSync("tasks", "tasks", [])
   },
-
   computed: {
     sortedTasks () {
-      const tasks = [...this.tasks]
-      tasks.sort((a, b) => a.status - b.status)
-      return tasks
+      return [...this.tasks].sort((a, b) => {
+        if(a.status !== b.status) return Number(a.status) - Number(b.status)
+        return (b.created_at ?? 0) - (a.created_at ?? 0)
+      })
     },
-    incomplateCount () {
+    incompleteCount () {
       return this.tasks.filter(x => !x.status).length
     },
     completedCount () {
       return this.tasks.filter(x => x.status).length
     }
   },
-
   methods: {
     addTask () {
-      if (this.newTask.trim() !== '') {
+        const text = this.newTask.trim()
+        if(!text) return
         const task = {
-          text: this.newTask,
-          created_at: new Date().toLocaleDateString(),
+          id: this.makeId(),
+          text,
+          created_at: this.yyyymmdd(),
           completed_at: null,
           status: false
         }
         this.tasks.unshift(task);
         this.newTask = '';
-      }
+        console.log("追加したid:", task)
     },
     confirmDelete () {
+      if(!this.deletingTask) return
       this.removeTask(this.deletingTask)
       this.deletingTask = null
       this.deleteDialog = false
     },
     removeTask (task) {
-      this.tasks = this.tasks.filter(i => i !== task)
+      this.tasks = this.tasks.filter(i => i.id !== task.id)
+      console.log("削除したアイテム:", task)
     },
     completeTask (task) {
       task.status = true
-      task.completed_at = new Date().toLocaleDateString()
+      task.completed_at = this.yyyymmddH()
     },
     restoreTask (task) {
       task.status = false

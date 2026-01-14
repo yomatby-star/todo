@@ -1,5 +1,5 @@
 <script>
-import Todo from './components/todo.vue'
+import Todo from './components/TodoView.vue'
 import Memo from './components/memo.vue'
 import ExpenseTracker from './components/ExpenseTracker/ExpenseTrackerMain.vue'
 import Mixin from "./mixin.js/mixin"

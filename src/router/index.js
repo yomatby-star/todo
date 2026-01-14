@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Todo from '../components/todo.vue'
+import Todo from '../components/TodoView.vue'
 import Memo from '../components/memo.vue'
 import ExpenseTracker from '../components/ExpenseTracker/ExpenseTrackerMain.vue'
 import IncomForm from '../components/ExpenseTracker/IncomForm.vue'
