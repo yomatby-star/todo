@@ -2,8 +2,6 @@
   <v-app>
     <v-main>
       <v-container style="max-width: 600px" class="mainContainer">
-        <!-- <h1 class="title">TODO</h1> -->
-        
         <!-- タスク一覧 -->
         <v-card elevation="2" class="taskCard">
           <div class="subHeader">
@@ -19,6 +17,7 @@
               </span>
             </div>
           </div>
+
           <v-list class="taskScroll" @scroll.passive="onTaskScroll">
             <v-list-item 
               v-for="(task, index) in sortedTasks"
@@ -68,7 +67,9 @@
               </template>
             </v-list-item>
           </v-list>
+
           <v-btn v-if="tasks.length !== 0" @click="allDeleteDialogOpen()" class="rightFixd allDeleteButton" :class="{ hidden: isScrolling }">全削除</v-btn>
+        
         </v-card>
 
         <!-- 入力カード -->
@@ -124,14 +125,18 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import localStorageSync from "../mixin.js/localStorageSync"
+
 export default {
   name: 'todo',
+  mixins: [localStorageSync],
   data () {
     return {
       newTask: '',
@@ -144,11 +149,9 @@ export default {
     }
   },
   mounted () {
-    const saveTask = localStorage.getItem('tasks');
-    if (saveTask) {
-      this.tasks = JSON.parse(saveTask)
-    }
+    this.startLocalStorageSync("tasks", "tasks", [])
   },
+
   computed: {
     sortedTasks () {
       const tasks = [...this.tasks]
@@ -161,13 +164,8 @@ export default {
     completedCount () {
       return this.tasks.filter(x => x.status).length
     }
-    // incompleteTasks () {
-    //   return this.tasks.filter(task => !task.status)
-    // },
-    // completedTasks () {
-    //   return this.tasks.filter(task => task.status)
-    // }
   },
+
   methods: {
     addTask () {
       if (this.newTask.trim() !== '') {
@@ -177,9 +175,7 @@ export default {
           completed_at: null,
           status: false
         }
-        console.log(task)
         this.tasks.unshift(task);
-        localStorage.setItem('tasks', JSON.stringify(this.tasks))
         this.newTask = '';
       }
     },
@@ -190,18 +186,14 @@ export default {
     },
     removeTask (task) {
       this.tasks = this.tasks.filter(i => i !== task)
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
     },
     completeTask (task) {
       task.status = true
       task.completed_at = new Date().toLocaleDateString()
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
-      console.log(task)
     },
     restoreTask (task) {
       task.status = false
       task.completed_at = null
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
     },
     openDeleteDialog (task) {
       this.deletingTask = task
@@ -219,7 +211,6 @@ export default {
     },
     allDeleting () {
       this.tasks = []
-      localStorage.removeItem('tasks')
       this.allDeleteDialog = false
     },
     onTaskScroll () {

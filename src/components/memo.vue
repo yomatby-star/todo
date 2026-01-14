@@ -6,7 +6,7 @@
         <v-card class="pa-3 mainCard" elevation="2" rounded="xl">
           <div class="d-flex align-center justify-space-between">
             <div class="text-h6">MEMO</div>
-            <span class="pillValue">件</span>
+            <span class="pillValue">{{ memos.length }} 件</span>
 
             <!-- ＋で新規作成 → ダイアログを開く -->
             <!-- <v-btn icon variant="text" @click="createMemoAndOpen()">
@@ -130,8 +130,11 @@
 </template>
 
 <script>
+import localStorageSync from '../mixin.js/localStorageSync'
+
 export default {
   name: "memo",
+  mixins: [localStorageSync],
   data () {
     return {
       memos: [],
@@ -143,16 +146,7 @@ export default {
     }
   },
   mounted() {
-    const saved = localStorage.getItem("memos_v1")
-    this.memos = saved ? JSON.parse(saved) : []
-  },
-  watch: {
-    memos: {
-      deep: true,
-      handler(newValue) {
-        localStorage.setItem("memos_v1", JSON.stringify(newValue))
-      }
-    }
+    this.startLocalStorageSync("memos_v1", "memos", [])
   },
   computed: {
     currentMemo() {
