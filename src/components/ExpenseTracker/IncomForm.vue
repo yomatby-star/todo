@@ -285,10 +285,8 @@ export default {
 <style scoped>
 .container {
   padding: 8px 12px 180px;
-  background:
-    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
-    radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
-    linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
+  height: 100dvh;
+  background-color: transparent;
 }
 .flex {
   display: flex;

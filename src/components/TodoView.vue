@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container style="max-width: 600px" class="mainContainer">
+      <v-container class="mainContainer">
         <!-- タスク一覧 -->
         <v-card elevation="2" class="taskCard">
           <div class="subHeader">
@@ -111,7 +111,7 @@
 
         <!-- 全削除 -->
         <v-dialog v-model="allDeleteDialog">
-          <v-card elevation="4" rounded="xg" class="confirmCard">
+          <v-card elevation="4" rounded="xg">
             <v-card-text>全部削除しますか？</v-card-text>
             <v-card-actions>
               <v-btn variant="text" @click="allcancelDelete">キャンセル</v-btn>
@@ -209,19 +209,27 @@ export default {
 
 
 <style scoped>
-/* ===== 背景：暗めの高級感（ダークガラスが映える） ===== */
 .mainContainer {
   padding: 10px 12px;
-  height: 100vh;
-  background:
-    radial-gradient(900px 500px at 15% 10%, rgba(130, 90, 255, 0.22), transparent 55%),
-    radial-gradient(900px 500px at 85% 25%, rgba(0, 180, 255, 0.18), transparent 55%),
-    linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
+  min-height: 100dvh;
+  background-color: transparent;
 }
-
-/* ===== ガラスカード（暗め） ===== */
+@media (min-width: 768px) {
+  :deep(.taskCard) {
+    width: 100% !important;
+    max-width: none !important;
+    height: 80vh !important;
+    max-height: none !important;
+  }
+  :deep(.taskCard .taskScroll) {
+    max-height: calc(80vh - 52px) !important;
+  }
+  .inputArea {
+    max-width: 1200px !important;
+  }
+}
 .inputArea {
-  background: rgba(18, 20, 32, 0.55) !important; /* 暗い半透明 */
+  background: rgba(18, 20, 32, 0.55) !important;
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow:
     0 14px 40px rgba(0, 0, 0, 0.45),
@@ -249,22 +257,18 @@ export default {
   -webkit-backdrop-filter: blur(16px);
   border-radius: 18px;
 }
-
 :deep(.taskCard .v-list) {
   background: transparent !important;
 }
-
 .taskCard {
   max-height: 65vh;
   margin: 0 0 16px;
 }
-
 .taskScroll {
   max-height: calc(65vh - 52px);
   overflow-y: auto;
   padding: 6px 0 60px;
 }
-
 .subHeader {
   display: flex;
   align-items: center;
@@ -273,7 +277,6 @@ export default {
   padding: 12px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 
-  /* 上品なダークガラス */
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.07),
@@ -288,21 +291,16 @@ export default {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
-
 .subTitleText {
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.7px;
   color: rgba(255, 255, 255, 0.88);
 }
-
-/* 右側のピルの並び */
 .counts {
   display: flex;
   gap: 10px;
 }
-
-/* ===== count pill（ガラス＋光の縁） ===== */
 .countPill {
   display: inline-flex;
   align-items: center;
@@ -311,7 +309,6 @@ export default {
   padding: 6px 10px;
   border-radius: 999px;
 
-  /* ガラス感 */
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid rgba(255, 255, 255, 0.14);
 
@@ -324,16 +321,12 @@ export default {
 
   user-select: none;
 }
-
-/* ラベルは控えめ */
 .pillLabel {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.4px;
   color: rgba(255, 255, 255, 0.68);
 }
-
-/* 数字は“強調”して高級感 */
 .pillValue {
   min-width: 22px;
   text-align: center;
@@ -350,10 +343,7 @@ export default {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.10);
 }
-
-/* ===== トーン別：未完了 / 完了で色味だけ上品に変える ===== */
 .countPill[data-tone="todo"] {
-  /* うっすら青寄りの縁取り */
   border-color: rgba(80, 140, 255, 0.22);
 }
 .countPill[data-tone="todo"] .pillValue {
@@ -362,38 +352,28 @@ export default {
 }
 
 .countPill[data-tone="done"] {
-  /* うっすら緑寄りの縁取り */
   border-color: rgba(0, 255, 160, 0.20);
 }
 .countPill[data-tone="done"] .pillValue {
   background: rgba(0, 255, 160, 0.10);
   border-color: rgba(0, 255, 160, 0.16);
 }
-
-/* ===== ホバー（PCで触った時だけ“気持ちよく”） ===== */
 .countPill:hover {
   transform: translateY(-1px);
   transition: transform 120ms ease, border-color 120ms ease;
 }
-
 .countPill:active {
   transform: translateY(0px);
 }
-
-
-/* ===== テキスト ===== */
 .task-text {
   font-size: 16px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.88);
 }
-
 .task-date {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.55);
 }
-
-/* 完了済み */
 .completed .task-text {
   text-decoration: line-through;
   opacity: 0.55;
@@ -401,8 +381,6 @@ export default {
 .completed .task-date {
   opacity: 0.55;
 }
-
-/* ===== スクロールバー（ダーク向け） ===== */
 .taskScroll::-webkit-scrollbar {
   width: 6px;
 }
@@ -413,8 +391,6 @@ export default {
 .taskScroll::-webkit-scrollbar-track {
   background: transparent;
 }
-
-/* ===== Vuetify内部：TextFieldをダークガラスに馴染ませる ===== */
 :deep(.v-field) {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.10);
@@ -422,59 +398,46 @@ export default {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
-
 :deep(.v-field__input) {
   color: rgba(255, 255, 255, 0.88);
 }
-
 :deep(.v-label) {
   color: rgba(255, 255, 255, 0.55);
 }
-
 :deep(.v-field__outline) {
   opacity: 0.4;
 }
-
-/* ボタン（アイコンボタンが浮きすぎないように） */
 :deep(.v-btn) {
   box-shadow: none;
 }
-
-.confirmCard {
+/* .confirmCard {
   background: rgba(18, 20, 32, 0.72) !important;
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: rgba(255, 255, 255, 0.90);
-}
-
+} */
 .allDeleteButton {
   background: rgba(18, 20, 32, 0.35) !important;
-  /* backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); */
   backdrop-filter: blur(14px) saturate(140%) brightness(110%);
   -webkit-backdrop-filter: blur(14px) saturate(140%) brightness(110%);
   border: 1px solid rgba(255,255,255,0.12);
   color: aliceblue !important;
-  min-width: 40px;   /* ←ここ大事 */
+  min-width: 40px;
   height: 40px;
   border-radius: 12px;
   padding: 4px;
-
   transition: opacity 160ms ease, transform 160ms ease;
 }
-
 .allDeleteButton.hidden {
   opacity: 0;
   pointer-events: none;
   transform: translateY(6px);
 }
-
 .rightFixd {
   position: fixed;
   right: 4px;
   bottom: 0;
 }
-
 </style>

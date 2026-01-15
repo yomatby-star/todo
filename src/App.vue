@@ -217,6 +217,7 @@ export default {
   box-shadow: 0 10px 30px;
   z-index: 1000;
 }
+
 .navItem {
   flex: 1;
   height: 100%;

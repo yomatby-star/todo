@@ -1,0 +1,27 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background:
+    radial-gradient(
+      clamp(520px, 60vw, 1400px) clamp(320px, 38vw, 900px) at 15% 10%,
+      rgba(130, 90, 255, 0.22),
+      transparent 55%
+    ),
+    radial-gradient(
+      clamp(520px, 60vw, 1400px) clamp(320px, 38vw, 900px) at 85% 25%,
+      rgba(0, 180, 255, 0.18),
+      transparent 55%
+    ),
+    linear-gradient(180deg, rgba(9, 10, 18, 0.98), rgba(15, 16, 26, 0.98));
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#app,
+.v-application,
+.v-application__wrap {
+  background: transparent !important;
+}
