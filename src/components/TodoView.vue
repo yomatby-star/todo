@@ -59,7 +59,7 @@
                   icon
                   color="red"
                   variant="text"
-                  @click="openDeleteDialog(task)"
+                  @click="openDeleteDialog(task, 'deletingTask', 'deleteDialog')"
                   aria-label="削除"
                 >
                   <v-icon>mdi-delete</v-icon>
@@ -102,18 +102,12 @@
           </v-row>
         </v-card>
 
-        <!-- 削除ダイアログ -->
-        <v-dialog v-model="deleteDialog" max-width="420">
-          <v-card elevation="4" rounded="lg" class="confirmCard">
-            <v-card-text>
-              {{ deletingTask?.text }} を削除します。
-            </v-card-text>
-            <v-card-actions>
-              <v-btn variant="text" @click="cancelDelete">キャンセル</v-btn>
-              <v-btn color="red" variant="flat" @click="confirmDelete">はい</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <confirmDelete
+          v-model="deleteDialog"
+          :message="`${deletingTask?.text} を削除します。`"
+          @cancel="cancelDelete('deletingTask', 'deleteDialog')"
+          @confirm="confirmDelete('tasks', 'deletingTask', 'deleteDialog')"
+        />
 
         <!-- 全削除 -->
         <v-dialog v-model="allDeleteDialog">
@@ -134,10 +128,13 @@
 <script>
 import mixin from "../mixin.js/mixin"
 import localStorageSync from "../mixin.js/localStorageSync"
+import deletingDialog from "../mixin.js/deletingDialog"
+import confirmDelete from "./ConfirmDeleteDialog/ConfirmDeleteDialogView.vue"
 
 export default {
   name: 'TodoView',
-  mixins: [mixin, localStorageSync],
+  mixins: [mixin, localStorageSync, deletingDialog],
+  components: { confirmDelete },
   data () {
     return {
       newTask: '',
@@ -181,16 +178,6 @@ export default {
         this.newTask = '';
         console.log("追加したid:", task)
     },
-    confirmDelete () {
-      if(!this.deletingTask) return
-      this.removeTask(this.deletingTask)
-      this.deletingTask = null
-      this.deleteDialog = false
-    },
-    removeTask (task) {
-      this.tasks = this.tasks.filter(i => i.id !== task.id)
-      console.log("削除したアイテム:", task)
-    },
     completeTask (task) {
       task.status = true
       task.completed_at = this.yyyymmddH()
@@ -198,14 +185,6 @@ export default {
     restoreTask (task) {
       task.status = false
       task.completed_at = null
-    },
-    openDeleteDialog (task) {
-      this.deletingTask = task
-      this.deleteDialog = true
-    },
-    cancelDelete () {
-      this.deletingTask = null
-      this.deleteDialog = false
     },
     allDeleteDialogOpen () {
       this.allDeleteDialog = true
