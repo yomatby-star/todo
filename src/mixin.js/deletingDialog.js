@@ -16,7 +16,7 @@ export default {
     },
 
     // 削除関係
-    confirmDelete (listKey, deletingKey, dialogKey) {
+    confirmDelete (listKey, deletingKey, dialogKey, afterDelete) {
       const target = this[deletingKey]
       console.log('listKey:', listKey , 'deletingKey:', deletingKey, 'dialogKey:', dialogKey)
       console.log(this[listKey])
@@ -28,6 +28,7 @@ export default {
       this[listKey] = this[listKey].filter(x => x.id !== target.id)
       console.log("削除")
       this.cancelDelete (deletingKey, dialogKey)
+      if(typeof afterDelete === 'function') afterDelete(target)
     },
   }
 }

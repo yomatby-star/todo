@@ -111,7 +111,7 @@
 
         <!-- 全削除 -->
         <v-dialog v-model="allDeleteDialog">
-          <v-card elevation="4" rounded="xg">
+          <v-card elevation="4" rounded="xg" max-width="420" location="center">
             <v-card-text>全部削除しますか？</v-card-text>
             <v-card-actions>
               <v-btn variant="text" @click="allcancelDelete">キャンセル</v-btn>
@@ -350,7 +350,6 @@ export default {
   background: rgba(80, 140, 255, 0.12);
   border-color: rgba(80, 140, 255, 0.18);
 }
-
 .countPill[data-tone="done"] {
   border-color: rgba(0, 255, 160, 0.20);
 }

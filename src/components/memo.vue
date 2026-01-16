@@ -35,7 +35,7 @@
                 <v-btn
                   icon
                   variant="text"
-                  @click.stop="openDeleteDialog(m.id)"
+                  @click.stop="openDeleteDialog(m, 'deletingMemo', 'deleteDialog')"
                 >
                   <v-icon color="red">mdi-delete</v-icon>
                 </v-btn>
@@ -73,7 +73,7 @@
             v-if="currentMemo"
             icon
             variant="text"
-            @click="openDeleteDialog(currentMemo.id, true)"
+            @click="openDeleteDialog(currentMemo, 'deletingMemo', 'deleteDialog')"
             aria-label="削除"
           >
             <v-icon color="red">mdi-delete</v-icon>
@@ -114,34 +114,32 @@
       <v-icon color="white">mdi-plus</v-icon>
     </v-btn>
 
-    <!-- 削除ダイアログ -->
-    <v-dialog v-model="deleteDialog" max-width="420">
-      <v-card elevation="4" rounded="lg" class="confirmCard">
-        <v-card-text>
-          {{ deletingMemo?.title || "このメモ"}} を削除します。
-        </v-card-text>
-        <v-card-actions>
-          <v-btn variant="text" @click="cancelDelete">キャンセル</v-btn>
-          <v-btn color="red" variant="flat" @click="confirmDelete">削除</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <confirmDelete 
+      v-model="deleteDialog"
+      :message="`${deletingMemo?.title || 'このメモ'} を削除します。`"
+      @cancel="cancelDelete('deletingMemo', 'deleteDialog')"
+      @confirm="onConfirmDelete"
+    />
   </v-container>
 </template>
 
 <script>
+import Mixin from '../mixin.js/mixin'
 import localStorageSync from '../mixin.js/localStorageSync'
+import deletingDialog from '../mixin.js/deletingDialog'
+import confirmDelete from './ConfirmDeleteDialog/ConfirmDeleteDialogView.vue'
 
 export default {
   name: "memo",
-  mixins: [localStorageSync],
+  mixins: [Mixin,localStorageSync, deletingDialog],
+  components: { confirmDelete },
   data () {
     return {
       memos: [],
       selectedId: null,
       editorOpen: false,
       deleteDialog: false,
-      deletingId: null,
+      deletingMemo: null,
       closeEditorOnDelete: false
     }
   },
@@ -152,27 +150,8 @@ export default {
     currentMemo() {
       return this.memos.find((m) => m.id === this.selectedId) || null
     },
-    deletingMemo() {
-      return this.memos.find((m) => m.id === this.deletingId) || null
-    }
   },
   methods: {
-    makeId() {
-      if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
-        return globalThis.crypto.randomUUID()
-      }
-      return `${Date.now()}-${Math.random().toString(16).slice(2)}`
-    },
-    formatDate(ts) {
-      if (!ts) return ""
-      const d = new Date(ts)
-      const yyyy = d.getFullYear()
-      const mm = String(d.getMonth() + 1).padStart(2, "0")
-      const dd = String(d.getDate()).padStart(2, "0")
-      const hh = String(d.getHours()).padStart(2, "0")
-      const mi = String(d.getMinutes()).padStart(2, "0")
-      return `${yyyy}/${mm}/${dd} ${hh}:${mi}`
-    },
     // ＋：新規作成して即編集を開く
     createMemoAndOpen() {
       const date = Date.now()
@@ -192,37 +171,6 @@ export default {
       this.selectedId = id
       this.editorOpen = true
     },
-    closeEditor() {
-      this.editorOpen = false
-    },
-    openDeleteDialog(id, shouldCloseEditor = false) {
-      this.deletingId = id
-      this.closeEditorOnDelete = shouldCloseEditor
-      this.deleteDialog = true
-    },
-    cancelDelete() {
-      this.deleteDialog = false
-      this.deletingId = null
-      this.closeEditorOnDelete = false
-    },
-    removeMemo(targetId) {
-      this.memos = this.memos.filter((m) => m.id !== targetId)
-      // 削除対象が今開いてるメモなら選択も解除
-      if (this.selectedId === targetId) {
-        this.selectedId = null
-      }
-    },
-    confirmDelete() {
-      if (!this.deletingId) return
-      const targetId = this.deletingId
-      this.removeMemo(targetId)
-
-      if (this.closeEditorOnDelete) {
-        this.closeEditor()
-      }
-      this.deleteDialog = false
-      this.deletingId = null
-    },
     touchCurrentMemo() {
       if (!this.currentMemo) return
       const date = Date.now()
@@ -230,6 +178,17 @@ export default {
       const firstLine = (this.currentMemo.body || "").split("\n")[0].trim()
       this.currentMemo.title = firstLine || "新規メモ"
       this.memos.sort((a, b) => b.updatedAt - a.updatedAt)
+    },
+    onConfirmDelete() {
+      this.confirmDelete(
+        'memos', 'deletingMemo', 'deleteDialog', 
+        (target) => {
+          if(target?.id === this.selectedId) {
+            this.editorOpen = false
+            this.deletingMemo = null
+          }
+        }
+      )
     }
   }
 }
